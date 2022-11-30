@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2.5.0
       - name: check status of cloudformation stack prior to deployment
         id: checkstatus
-        uses: actions/Balou9/cfn-check-status@v0.1
+        uses: actions/cfn-check-status@v0.2
         with:
           stack-name: env.STACK_NAME
       - name: Get the stack status

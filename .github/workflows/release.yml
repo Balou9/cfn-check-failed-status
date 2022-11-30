@@ -1,0 +1,13 @@
+name: release
+
+on:
+ push:
+   tags:
+     - "v*"
+
+jobs:
+  release:
+    name: release cfn-check-status
+    runs-on: ubuntu-latest
+    steps:
+      - uses: technote-space/release-github-actions@v6

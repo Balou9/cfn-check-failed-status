@@ -1,11 +1,16 @@
 # cfn-check-status
 
-This action checks the status of a cloudformation stack and deletes the stack if it is any FAILED status.
+This action **checks the status** of a cloudformation stack and **deletes the stack if it is any [FAILED](##cfn-failed-status) status.**
 
 ## usage
 
 This action can be used in a cloudformation deployment pipeline. It resolves the pain to delete the stack by hand if the previous deployment resolved in a failed status.
 
+### inputs
+
+#### `stack_name`
+
+**Required** The name of the stack to be checked
 
 ```yml
 name: cd
@@ -37,3 +42,15 @@ jobs:
             --parameter-overrides \
           ...
 ```
+
+## cfn failed status
+
+The following cloudformation stack status will resolve in stack deletion:
+
+- CREATE_FAILED
+- ROLLBACK_FAILED
+- UPDATE_FAILED
+- UPDATE_ROLLBACK_FAILED
+- DELETE_FAILED
+
+see: https://medium.com/nerd-for-tech/cloudformation-status-transition-ea402050c7aa

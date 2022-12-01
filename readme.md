@@ -1,6 +1,8 @@
 # cfn-check-status
 
-This action **checks the status** of a cloudformation stack and **deletes the stack if it is any [FAILED](#fn-failed-status) status.**
+**wip**
+
+This action **checks the status** of a cloudformation stack and **deletes the stack if it is any [FAILED](#cfn-failed-status) status.**
 
 ## usage
 

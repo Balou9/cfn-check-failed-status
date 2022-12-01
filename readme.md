@@ -4,11 +4,11 @@ This action checks the status of a cloudformation stack and deletes the stack if
 
 ## usage
 
-This action can be used in a cloudformation deployment pipeline. It resolves the pain to delete the stack by hand if the previous deployment resolved in a failed status. 
+This action can be used in a cloudformation deployment pipeline. It resolves the pain to delete the stack by hand if the previous deployment resolved in a failed status.
 
 
 ```yml
-name: ci
+name: cd
 
 on: push
 
@@ -16,7 +16,7 @@ env:
   STACK_NAME: test-stack
 
 jobs:
-  test-cfn-check-status:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: clone the repo
@@ -27,6 +27,13 @@ jobs:
         with:
           stack-name: env.STACK_NAME
       - name: Get the stack status
-        run: echo "Stack status of $env.STACK_NAME was ${{ steps.checkstatus.outputs }}"
-
+        run: |
+          echo "Stack status of the previous deployment of $env.STACK_NAME was ${{ steps.checkstatus.outputs }}"
+      - name: deploy cloudformation stack
+        run: |
+          aws cloudformation deploy \
+            --template-file=./stack.yml \
+            --stack-name=${{ env.STACK_NAME }} \
+            --parameter-overrides \
+          ...
 ```

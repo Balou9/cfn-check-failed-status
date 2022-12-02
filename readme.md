@@ -2,7 +2,7 @@
 
 **wip**
 
-This action **checks the status** of a cloudformation stack and **deletes the stack if it is any [FAILED](#cfn-failed-status) status.**
+This action **checks the status** of a cloudformation stack and **deletes the stack if it runs in any [FAILED](#cfn-failed-status) status.**
 
 ## usage
 

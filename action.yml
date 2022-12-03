@@ -1,11 +1,11 @@
 name: cfn-check-stack-status
 description: Checks the status of the cloudformation stack and deletes the stack if the last changeset leads to a "failed" stack status.
 inputs:
-  CFN_STACK_NAME:
+  cfn-stack-name:
     description: name of the cloudformation stack to be status checked
     required: true
 runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ inputs.CFN_STACK_NAME }}
+    - ${{ inputs.cfn-stack-name }}

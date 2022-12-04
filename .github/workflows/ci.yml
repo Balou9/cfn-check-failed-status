@@ -1,6 +1,12 @@
 name: ci
 
-on: push
+on:
+  push:
+    paths:
+    - "action.yml"
+    - "Dockerfile"
+    - "entrypoint.sh"
+    - ".github/workflows/ci.yml"
 
 env:
   STACK_NAME: 'test-stack'

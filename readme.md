@@ -47,7 +47,7 @@ jobs:
           ...
 ```
 
-## cfn failed status
+## feat: cfn stack deletion on failed status
 
 The following cloudformation stack status will resolve in stack deletion:
 

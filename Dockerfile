@@ -11,7 +11,7 @@ RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
 
 USER docker
 CMD /bin/bash
-RUN sudo ./aws/install
+RUN sudo -S ./aws/install
 
 COPY entrypoint.sh /entrypoint.sh
 

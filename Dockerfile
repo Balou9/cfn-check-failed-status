@@ -2,6 +2,7 @@ FROM debian:latest
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update && apt-get install -y \
     curl \
+    jq \
     unzip
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"

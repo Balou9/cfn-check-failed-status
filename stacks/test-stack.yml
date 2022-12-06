@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: coinwatch calculator stack
+Metadata:
+  AWS::Cloudformation::Interface:
+    Parametergroups:
+      - Label:
+          default: Storage
+        Parameters:
+          - APayloadBucketName
+
+Parameters:
+  APayloadBucketName:
+    Description: Name of the the test payload bucket
+    Type: String
+
+Resources:
+  CoinWatchPayloadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref CoinWatchPayloadBucketName
+      AccessControl: PublicRead
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain

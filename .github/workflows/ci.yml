@@ -8,15 +8,28 @@ on:
     - "entrypoint.sh"
     - ".github/workflows/ci.yml"
 
-env:
-  STACK_NAME: 'test-stack'
-
 jobs:
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
+    env:
+      CFN_TEMPLATES: "stacks/test-stack.yml\n"
     steps:
       - name: clone the repo
         uses: actions/checkout@v3
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.5.3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: validates all cloudformation templates
+        run: |
+          printf "${{ env.CFN_TEMPLATES }}" | while read template; do
+            aws cloudformation validate-template \
+              --template-body="file://$template"
+          done
+
       - name: test cfn-check-status
         uses: ./
         id: ccs

@@ -14,7 +14,7 @@ Parameters:
     Type: String
 
 Resources:
-  CoinWatchPayloadBucket:
+  APayloadBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref CoinWatchPayloadBucketName

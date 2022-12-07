@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Continuous deployment setup providing one user to maintain all stacks
+  (for cfn-check-status testing purposes). This template's outputs provide
+  the aws credentials that are prerequisites for performing the stack updates.
+  Make sure to manually deploy this stack, then set the github secrets
+  AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY given the corresponding stack outputs.
+
+Resources:
+  User:
+    Type: AWS::IAM::User
+    Properties:
+      Policies:
+        - PolicyName: DeploymentPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: AllowStackDeployments
+                Effect: Allow
+                Action:
+                  - cloudformation:*
+                  - lambda:*
+                  - iam:*
+                  - logs:*
+                  - s3:*
+                Resource: "*"
+
+  AccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      Status: Active
+      UserName: !Ref User
+
+Outputs:
+  UserArn:
+    Description: IAM user with stack admin rigths
+    Value: !GetAtt User.Arn
+
+  UserAccessKeyId:
+    Description: Access key id of the IAM user
+    Value: !Ref AccessKey
+
+  UserSecretAccessKey:
+    Description: Secret access key of the IAM user
+    Value: !GetAtt AccessKey.SecretAccessKey

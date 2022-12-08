@@ -17,7 +17,7 @@ Resources:
   APayloadBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref CoinWatchPayloadBucketName
+      BucketName: !Ref APayloadBucketName
       AccessControl: PublicRead
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain

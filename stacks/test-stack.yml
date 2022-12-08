@@ -1,23 +1,23 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: coinwatch calculator stack
+Description: cfn-check-status test stack
 Metadata:
   AWS::Cloudformation::Interface:
     Parametergroups:
       - Label:
           default: Storage
         Parameters:
-          - APayloadBucketName
+          - CfnCheckStatusBucketName
 
 Parameters:
-  APayloadBucketName:
+  CfnCheckStatusBucketName:
     Description: Name of the the test payload bucket
     Type: String
 
 Resources:
-  APayloadBucket:
+  CfnCheckStatusBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref APayloadBucketName
+      BucketName: !Ref CfnCheckStatusBucketName
       AccessControl: PublicRead
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain

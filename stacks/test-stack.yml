@@ -10,7 +10,7 @@ Metadata:
 
 Parameters:
   CfnCheckStatusBucketName:
-    Description: Name of the the test payload bucket
+    Description: Name of the the test bucket
     Type: String
 
 Resources:

@@ -41,7 +41,7 @@ jobs:
       - name: deploy the cfn-check-status stack
         run: |
           aws cloudformation deploy \
-            --template-file=stacks/test-stack.yml \
+            --template-file="stacks/test-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \

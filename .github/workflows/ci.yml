@@ -29,9 +29,12 @@ jobs:
               --template-body="file://$template"
           done
 
-      - name: configure the environment
+      - name: map branch 2 test
         run: |
           echo "ENVIRONMENT=test" >> $GITHUB_ENV
+
+      - name: configure the environment
+        run: |
           echo "STACK_NAME=$ENVIRONMENT-cfn-check-status" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_BUCKET_NAME=$ENVIRONMENT-bucket" >> $GITHUB_ENV
 

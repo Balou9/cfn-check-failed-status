@@ -2,12 +2,8 @@ name: ci
 
 on:
   push:
-    paths:
-    - "action.yml"
-    - "Dockerfile"
-    - "entrypoint.sh"
-    - ".github/workflows/ci.yml"
-
+    paths-inore:
+    - "readme.md"
 env:
   AWS_REGION: us-east-1
 

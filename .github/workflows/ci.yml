@@ -46,9 +46,8 @@ jobs:
             --parameter-overrides \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
-            --no-fail-on-empty-changeset \
-            --debug
-
+            --no-fail-on-empty-changeset
+            
       - name: test cfn-check-status
         uses: ./
         id: ccs

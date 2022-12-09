@@ -1,3 +1,5 @@
+[![ci](https://github.com/Balou9/cfn-check-status/workflows/ci/badge.svg)](https://github.com/Balou9/cfn-check-status/actions)
+
 # cfn-check-status
 
 **wip**
@@ -34,7 +36,7 @@ jobs:
         id: checkstatus
         uses: actions/cfn-check-status@v0.2.0
         with:
-          stack-name: env.STACK_NAME
+          stack-name: ${{ env.STACK_NAME }}
       - name: Get the stack status
         run: |
           echo "Stack status of the previous deployment of $env.STACK_NAME was ${{ steps.checkstatus.outputs }}"

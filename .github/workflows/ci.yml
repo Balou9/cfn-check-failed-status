@@ -36,7 +36,7 @@ jobs:
       - name: configure the environment
         run: |
           echo "STACK_NAME=$ENVIRONMENT-cfn-check-status" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_BUCKET_NAME=$ENVIRONMENT-cfn-check-status-bucket" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_BUCKET_NAME=$ENVIRONMENT-cfn-check-status-bucket-419" >> $GITHUB_ENV
 
       - name: deploy the cfn-check-status stack
         run: |
@@ -47,7 +47,7 @@ jobs:
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset \
             --debug
-            
+
       - name: test cfn-check-status
         uses: ./
         id: ccs

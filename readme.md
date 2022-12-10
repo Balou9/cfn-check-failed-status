@@ -2,19 +2,28 @@
 
 # cfn-check-status
 
-**wip**
+A Github action that **checks the status** of a cloudformation stack and **deletes the stack if it runs in any [FAILED](#feat: cfn stack deletion on failed status) status.** It resolves the pain to delete the stack by hand if the previous deployment resolved in a failed status.
 
-This action **checks the status** of a cloudformation stack and **deletes the stack if it runs in any [FAILED](#feat: cfn stack deletion on failed status) status.**
-
-## usage
-
-This action can be used in a cloudformation deployment pipeline. It resolves the pain to delete the stack by hand if the previous deployment resolved in a failed status.
 
 ### inputs
 
 ##### `stack_name`
 
 **Required** The name of the stack to be checked
+
+## usage
+
+```yml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:  
+    - name: check status of cloudformation stack prior to deployment
+      id: checkstatus
+      uses: actions/cfn-check-status@v0.1.0
+      with:
+        stack-name: stackstack
+```
 
 #### example usage in deployment pipeline
 

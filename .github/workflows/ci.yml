@@ -4,11 +4,12 @@ on:
   push:
     paths-inore:
     - "readme.md"
+
 env:
   AWS_REGION: us-east-1
 
 jobs:
-  test: # make sure the action works on a clean machine without building
+  test-create-update-complete: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     env:
       CFN_TEMPLATES: "stacks/test-stack.yml\n"
@@ -53,3 +54,8 @@ jobs:
         id: ccs
         with:
           cfn-stack-name: ${{ env.STACK_NAME }}
+
+      - name: delete the cfn-check-status test stack
+        run: |
+          aws cloudformation delete-stack \
+            --stack-name=${{ env.STACK_NAME }}

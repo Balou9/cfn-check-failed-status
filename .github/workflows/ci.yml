@@ -59,3 +59,5 @@ jobs:
         run: |
           aws cloudformation delete-stack \
             --stack-name=${{ env.STACK_NAME }}
+
+            aws s3 rb s3://${{ env.CFN_CHECK_STATUS_BUCKET_NAME }} --force

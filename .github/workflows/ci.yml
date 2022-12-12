@@ -9,10 +9,10 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
-  test-create-update-complete: # make sure the action works on a clean machine without building
+  test-create-complete:
     runs-on: ubuntu-latest
     env:
-      CFN_TEMPLATES: "stacks/test-stack.yml\n"
+      CFN_TEMPLATES: "stacks/test-create-complete-stack.yml\n"
     steps:
       - name: clone the repo
         uses: actions/checkout@v3
@@ -42,14 +42,14 @@ jobs:
       - name: deploy the cfn-check-status stack
         run: |
           aws cloudformation deploy \
-            --template-file="stacks/test-stack.yml" \
+            --template-file="stacks/test-create-complete-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: test cfn-check-status
+      - name: test cfn-check-status with a cloudformation stack in CREATE_COMPLETE status
         uses: ./
         id: ccs
         with:

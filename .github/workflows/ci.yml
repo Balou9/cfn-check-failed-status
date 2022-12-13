@@ -36,16 +36,16 @@ jobs:
 
       - name: configure the environment
         run: |
-          echo "STACK_NAME=$ENVIRONMENT-cfn-check-status" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_BUCKET_NAME=$ENVIRONMENT-cfn-check-status-bucket" >> $GITHUB_ENV
+          echo "STACK_NAME=$ENVIRONMENT-create-complete-cfn-check-status" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME=$ENVIRONMENT-create-complete-cfn-check-status-bucket" >> $GITHUB_ENV
 
-      - name: deploy the cfn-check-status stack
+      - name: deploy the create-complete-cfn-check-status stack
         run: |
           aws cloudformation deploy \
             --template-file="stacks/test-create-complete-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
-              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_BUCKET_NAME }} \
+              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
@@ -55,9 +55,51 @@ jobs:
         with:
           cfn-stack-name: ${{ env.STACK_NAME }}
 
-      - name: delete the cfn-check-status test stack
+      - name: delete the create-complete-cfn-check-status test stack
         run: |
           aws cloudformation delete-stack \
             --stack-name=${{ env.STACK_NAME }}
 
-            aws s3 rb s3://${{ env.CFN_CHECK_STATUS_BUCKET_NAME }} --force
+          aws s3 rb s3://${{ env.CFN_CHECK_STATUS_BUCKET_NAME }} --force
+
+  test-create-failed:
+    runs-on: ubuntu-latest
+    env:
+      CFN_TEMPLATES: "stacks/test-create-failed-stack.yml\n"
+    steps:
+      - name: clone the repo
+        uses: actions/checkout@v3
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.5.3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: validates all cloudformation templates
+        run: |
+          printf "${{ env.CFN_TEMPLATES }}" | while read template; do
+            aws cloudformation validate-template \
+              --template-body="file://$template"
+          done
+
+      - name: configure the environment
+        run: |
+          echo "STACK_NAME=$ENVIRONMENT-create-failed-cfn-check-status" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=$ENVIRONMENT-create-failed-cfn-check-status-bucket" >> $GITHUB_ENV
+
+      - name: deploy the create-failed-cfn-check-status stack
+        run: |
+          aws cloudformation deploy \
+            --template-file="stacks/test-create-failed-stack.yml" \
+            --stack-name=${{ env.STACK_NAME }} \
+            --parameter-overrides \
+              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }} \
+            --capabilities=CAPABILITY_NAMED_IAM \
+            --no-fail-on-empty-changeset
+
+      - name: test cfn-check-status with a cloudformation stack in CREATE_FAILED status
+        uses: ./
+        id: ccs
+        with:
+          cfn-stack-name: ${{ env.STACK_NAME }}

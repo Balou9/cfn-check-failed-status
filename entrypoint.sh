@@ -1,6 +1,6 @@
 #!/bin/bash
 STACK_NAME="$1"
-echo "$STACK_NAME"
+
 stack_status=$(aws cloudformation describe-stacks \
   --stack-name="$STACK_NAME" \
   | jq ".Stacks[].StackStatus")

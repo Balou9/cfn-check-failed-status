@@ -95,7 +95,7 @@ jobs:
 
       - name: creates bucket
         run: |
-          aws s3 create-bucket \
+          aws s3api create-bucket \
           --acl="public-read" \
           --bucket=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }}
 

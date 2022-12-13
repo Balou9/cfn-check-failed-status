@@ -39,7 +39,7 @@ jobs:
           echo "STACK_NAME=$ENVIRONMENT-create-complete-cfn-check-status" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME=$ENVIRONMENT-create-complete-cfn-check-status-bucket" >> $GITHUB_ENV
 
-      - name: deploy the create-complete-cfn-check-status stack
+      - name: deploy the create-complete-cfn-check-status stack to "force" CREATE_COMPLETE status
         run: |
           aws cloudformation deploy \
             --template-file="stacks/test-create-complete-stack.yml" \
@@ -84,12 +84,22 @@ jobs:
               --template-body="file://$template"
           done
 
+      - name: map branch 2 test
+        run: |
+          echo "ENVIRONMENT=test" >> $GITHUB_ENV
+
       - name: configure the environment
         run: |
           echo "STACK_NAME=$ENVIRONMENT-create-failed-cfn-check-status" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=$ENVIRONMENT-create-failed-cfn-check-status-bucket" >> $GITHUB_ENV
 
-      - name: deploy the create-failed-cfn-check-status stack
+      - name: creates bucket
+        run: |
+          aws s3 create-bucket \
+          --acl="public-read" \
+          --bucket=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }}
+
+      - name: deploy the create-failed-cfn-check-status stack to force CREATE_FAILED status
         run: |
           aws cloudformation deploy \
             --template-file="stacks/test-create-failed-stack.yml" \

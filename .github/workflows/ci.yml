@@ -100,16 +100,15 @@ jobs:
           --bucket=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }}
 
       - name: deploy the create-failed-cfn-check-status stack to force CREATE_FAILED status
+        continue-on-error: true
         run: |
-          create_failed_payload=$(aws cloudformation deploy \
+          aws cloudformation deploy \
             --template-file="stacks/test-create-failed-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
-            --no-fail-on-empty-changeset)
-
-          echo "$create_failed_payload"
+            --no-fail-on-empty-changeset
 
       - name: test cfn-check-status with a cloudformation stack in CREATE_FAILED status
         uses: ./

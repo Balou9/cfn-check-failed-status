@@ -5,6 +5,8 @@ stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq ".StackEvents[].ResourceStatus")
 
+echo "RECENT STACK EVENTS:\n"
+
 while IFS= read -r line; do
   if [[ "$line" == "CREATE_FAILED" ]] || [[ "$line" == "ROLLBACK_FAILED" ]] || [[ "$line" == "UPDATE_FAILED" ]] || [[ "$line" == "UPDATE_ROLLBACK_FAILED" ]] || [[ "$line" == "DELETE_FAILED" ]]
   then
@@ -17,8 +19,8 @@ done <<< "$stack_status_list"
 
 if [[ -z "$stack_status" ]]
 then
-  echo "$STACK_NAME" " is in "$stack_status" status. About to be deleted."
-  aws delete-stack --stack-name=$STACK_NAME
+  echo "stack name...... $STACK_NAME"
 else
-  echo "$STACK_NAME" " is in "$stack_status" status"
+  echo "$STACK_NAME" " is in "$stack_status" status. About to be deleted."
+  aws cloudformation delete-stack --stack-name=$STACK_NAME
 fi

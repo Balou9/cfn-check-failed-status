@@ -20,7 +20,7 @@ jobs:
     steps:  
     - name: check status of cloudformation stack prior to deployment
       id: checkstatus
-      uses: actions/cfn-check-status@v0.1.0
+      uses: ./
       with:
         stack-name: stackstack
 ```
@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v2.5.0
       - name: check status of cloudformation stack prior to deployment
         id: checkstatus
-        uses: actions/cfn-check-status@v0.2.0
+        uses: ./
         with:
           stack-name: ${{ env.STACK_NAME }}
       - name: Get the stack status

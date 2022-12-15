@@ -2,7 +2,7 @@
 
 # cfn-check-status
 
-A Github action that checks the status of a cloudformation stack and deletes the stack if it runs in any XXX_FAILED status. It resolves the pain to delete the stack by hand if the previous deployment resolved in a failed status.
+A Github action that checks the status of a cloudformation stack and deletes the stack if the previous deployment resolved in a failed status. It resolves the pain to delete the stack by hand during the development process.
 
 
 ### inputs

@@ -1,12 +1,21 @@
 #!/bin/bash
 STACK_NAME="$1"
 
-stack_status=$(aws cloudformation describe-stacks \
+stack_status_list=$(aws cloudformation describe-stacks \
   --stack-name="$STACK_NAME" \
-  | jq ".Stacks[].StackStatus")
+  | jq ".StackEvents[].ResourceStatus")
 
-echo "$stack_status"
-if [[ "$stack_status" == "CREATE_FAILED" ]] || [[ "$stack_status" == "ROLLBACK_FAILED" ]] || [[ "$stack_status" == "UPDATE_FAILED" ]] || [[ "$stack_status" == "UPDATE_ROLLBACK_FAILED" ]] || [[ "$stack_status" == "DELETE_FAILED" ]]
+while IFS= read -r line; do
+  if [[ "$line" == "CREATE_FAILED" ]] || [[ "$line" == "ROLLBACK_FAILED" ]] || [[ "$line" == "UPDATE_FAILED" ]] || [[ "$line" == "UPDATE_ROLLBACK_FAILED" ]] || [[ "$line" == "DELETE_FAILED" ]]
+  then
+    stack_status="$line"
+    echo "### $line ###"
+  else
+    echo "$line"
+  fi
+done <<< "$stack_status_list"
+
+if [[ -z "$stack_status" ]]
 then
   echo "$STACK_NAME" " is in " $stack_status " status. About to be deleted."
   aws delete-stack --stack-name=$STACK_NAME

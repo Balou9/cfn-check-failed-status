@@ -17,8 +17,8 @@ done <<< "$stack_status_list"
 
 if [[ -z "$stack_status" ]]
 then
-  echo "$STACK_NAME" " is in " $stack_status " status. About to be deleted."
+  echo "$STACK_NAME" " is in "$stack_status" status. About to be deleted."
   aws delete-stack --stack-name=$STACK_NAME
 else
-  echo "$STACK_NAME" " is in " $stack_status " status"
+  echo "$STACK_NAME" " is in "$stack_status" status"
 fi

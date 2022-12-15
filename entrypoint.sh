@@ -1,7 +1,7 @@
 #!/bin/bash
 STACK_NAME="$1"
 
-stack_status_list=$(aws cloudformation describe-stacks \
+stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq ".StackEvents[].ResourceStatus")
 

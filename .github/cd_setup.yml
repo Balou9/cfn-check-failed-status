@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: |
   Continuous deployment setup providing one user to maintain all stacks
-  (for cfn-check-status testing purposes). This template's outputs provide
+  (for cfn-check-failed-status testing purposes). This template's outputs provide
   the aws credentials that are prerequisites for performing the stack updates.
   Make sure to manually deploy this stack, then set the github secrets
   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY given the corresponding stack outputs.

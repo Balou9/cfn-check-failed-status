@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: cfn-check-status CREATE_FAILED stack
+Description: cfn-check-failed-status CREATE_FAILED stack
 Metadata:
   AWS::Cloudformation::Interface:
     Parametergroups:

@@ -36,10 +36,10 @@ jobs:
 
       - name: configure the environment
         run: |
-          echo "STACK_NAME=$ENVIRONMENT-create-complete-cfn-check-status" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME=$ENVIRONMENT-create-complete-cfn-check-status-bucket" >> $GITHUB_ENV
+          echo "STACK_NAME=$ENVIRONMENT-create-complete-cfn-check-failed-status" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME=$ENVIRONMENT-create-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
-      - name: deploy the create-complete-cfn-check-status stack to "force" CREATE_COMPLETE status
+      - name: deploy the create-complete-cfn-check-failed-status stack to "force" CREATE_COMPLETE status
         run: |
           aws cloudformation deploy \
             --template-file="stacks/test-create-complete-stack.yml" \
@@ -49,13 +49,13 @@ jobs:
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: test cfn-check-status with a cloudformation stack in CREATE_COMPLETE status
+      - name: test cfn-check-failed-status with a cloudformation stack in CREATE_COMPLETE status
         uses: ./
         id: ccs
         with:
           cfn-stack-name: ${{ env.STACK_NAME }}
 
-      - name: delete the create-complete-cfn-check-status test stack
+      - name: delete the create-complete-cfn-check-failed-status test stack
         run: |
           aws cloudformation delete-stack \
             --stack-name=${{ env.STACK_NAME }}
@@ -90,8 +90,8 @@ jobs:
 
       - name: configure the environment
         run: |
-          echo "STACK_NAME=$ENVIRONMENT-create-failed-cfn-check-status" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=$ENVIRONMENT-create-failed-cfn-check-status-bucket" >> $GITHUB_ENV
+          echo "STACK_NAME=$ENVIRONMENT-create-failed-cfn-check-failed-status" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=$ENVIRONMENT-create-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
       - name: creates bucket
         run: |
@@ -99,7 +99,7 @@ jobs:
           --acl="public-read" \
           --bucket=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }}
 
-      - name: deploy the create-failed-cfn-check-status stack to force CREATE_FAILED status
+      - name: deploy the create-failed-cfn-check-failed-status stack to force CREATE_FAILED status
         continue-on-error: true
         run: |
           aws cloudformation deploy \
@@ -110,13 +110,13 @@ jobs:
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: test cfn-check-status with a cloudformation stack in CREATE_FAILED status
+      - name: test cfn-check-failed-status with a cloudformation stack in CREATE_FAILED status
         uses: ./
         id: ccs
         with:
           cfn-stack-name: ${{ env.STACK_NAME }}
 
-      - name: delete the create-failed-cfn-check-status test stack
+      - name: delete the create-failed-cfn-check-failed-status test stack
         run: |
           aws cloudformation delete-stack \
             --stack-name=${{ env.STACK_NAME }}

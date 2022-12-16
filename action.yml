@@ -1,5 +1,5 @@
-name: cfn-check-stack-status
-description: Checks the status of the cloudformation stack and deletes the stack if the last changeset leads to a "failed" stack status.
+name: cfn-check-failed-status
+description: Checks the status of the cloudformation stack and deletes the stack if the last deployment led to a "failed" stack status.
 inputs:
   cfn-stack-name:
     description: name of the cloudformation stack to be status checked

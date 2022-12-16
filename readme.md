@@ -1,6 +1,6 @@
-[![ci](https://github.com/Balou9/cfn-check-status/workflows/ci/badge.svg)](https://github.com/Balou9/cfn-check-status/actions)
+[![ci](https://github.com/Balou9/cfn-check-failed-status/workflows/ci/badge.svg)](https://github.com/Balou9/cfn-check-failed-status/actions)
 
-# cfn-check-status
+# cfn-check-failed-status
 
 A Github action that checks the status of a cloudformation stack and deletes the stack if the previous deployment resolved in a failed status. It resolves the pain to delete the stack by hand during the development process.
 

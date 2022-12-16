@@ -2,6 +2,8 @@
 
 # cfn-check-failed-status
 
+**wip**
+
 A Github action that checks the status of a cloudformation stack and deletes the stack if the previous deployment resolved in a failed status. It resolves the pain to manually delete the stack during the development process.
 
 
@@ -41,6 +43,7 @@ jobs:
     steps:
       - name: clone the repo
         uses: actions/checkout@v2.5.0
+
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.5.3
         with:

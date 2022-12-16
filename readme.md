@@ -2,7 +2,7 @@
 
 # cfn-check-failed-status
 
-A Github action that checks the status of a cloudformation stack and deletes the stack if the previous deployment resolved in a failed status. It resolves the pain to delete the stack by hand during the development process.
+A Github action that checks the status of a cloudformation stack and deletes the stack if the previous deployment resolved in a failed status. It resolves the pain to manually delete the stack during the development process.
 
 
 ### inputs
@@ -41,14 +41,33 @@ jobs:
     steps:
       - name: clone the repo
         uses: actions/checkout@v2.5.0
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.5.3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: validates cloudformation template
+        run: |
+          aws cloudformation validate-template \
+            --template-body="./stack.yml"
+
       - name: check status of cloudformation stack prior to deployment
         id: checkstatus
         uses: ./
         with:
           stack-name: ${{ env.STACK_NAME }}
+
       - name: Get the stack status
         run: |
           echo "Stack status of the previous deployment of $env.STACK_NAME was ${{ steps.checkstatus.outputs }}"
+
+      - name: configure the environment
+        run: |
+          echo "STACK_NAME=example-stack231" >> $GITHUB_ENV
+#          echo ...
+
       - name: deploy cloudformation stack
         run: |
           aws cloudformation deploy \

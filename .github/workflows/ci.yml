@@ -42,7 +42,7 @@ jobs:
       - name: deploy the create-complete-cfn-check-failed-status stack to "force" CREATE_COMPLETE status
         run: |
           aws cloudformation deploy \
-            --template-file="stacks/test-create-complete-stack.yml" \
+            --template-file="test/stacks/test-create-complete-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME }} \
@@ -74,6 +74,7 @@ jobs:
     steps:
       - name: clone the repo
         uses: actions/checkout@v3
+
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.5.3
         with:
@@ -107,7 +108,7 @@ jobs:
         continue-on-error: true
         run: |
           aws cloudformation deploy \
-            --template-file="stacks/test-create-failed-stack.yml" \
+            --template-file="test/stacks/test-create-failed-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }} \

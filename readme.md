@@ -7,7 +7,7 @@ A Github action that checks the status of a cloudformation stack and deletes the
 
 ### inputs
 
-##### `stack_name`
+##### `stack-name`
 
 **Required** The name of the stack to be checked
 

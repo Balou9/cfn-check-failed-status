@@ -51,9 +51,13 @@ jobs:
 
       - name: test cfn-check-failed-status with a cloudformation stack in CREATE_COMPLETE status
         uses: ./
-        id: ccs
+        id: checkstatus
         with:
           cfn-stack-name: ${{ env.STACK_NAME }}
+
+      - name: validate output message of the status check
+        run: |
+          echo "Stack status of the previous deployment of $env.STACK_NAME was ${{ steps.checkstatus.outputs.message }}"
 
       - name: delete the create-complete-cfn-check-failed-status test stack
         run: |
@@ -115,6 +119,10 @@ jobs:
         id: ccs
         with:
           cfn-stack-name: ${{ env.STACK_NAME }}
+
+      - name: validate output message of the status check
+        run: |
+          echo "Stack status of the previous deployment of $env.STACK_NAME was ${{ steps.checkstatus.outputs.message }}"
 
       - name: delete the create-failed-cfn-check-failed-status test stack
         run: |

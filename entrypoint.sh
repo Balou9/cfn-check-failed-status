@@ -19,8 +19,12 @@ done <<< "$stack_status_list"
 
 if [[ -z "$stack_status" ]]
 then
-  echo "stack name...... $STACK_NAME"
+  output_msg="stack name...... $STACK_NAME"
+  echo "$output_msg"
+  echo "::set-output name=message::$output_msg"
 else
-  echo "$STACK_NAME" " is in "$stack_status" status. About to be deleted."
+  output_msg="$STACK_NAME" " is in "$stack_status" status. About to be deleted."
+  echo "$output_msg"
+  echo "::set-output name=message::$output_msg"
   aws cloudformation delete-stack --stack-name=$STACK_NAME
 fi

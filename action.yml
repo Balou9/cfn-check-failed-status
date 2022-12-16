@@ -4,6 +4,9 @@ inputs:
   cfn-stack-name:
     description: name of the cloudformation stack to be status checked
     required: true
+outputs:
+  message:
+    description: message indicating whether the stack was in failed status or not
 runs:
   using: docker
   image: Dockerfile

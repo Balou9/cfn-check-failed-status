@@ -115,3 +115,10 @@ jobs:
         id: ccs
         with:
           cfn-stack-name: ${{ env.STACK_NAME }}
+
+      - name: delete the create-failed-cfn-check-status test stack
+        run: |
+          aws cloudformation delete-stack \
+            --stack-name=${{ env.STACK_NAME }}
+
+          aws s3 rb s3://${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }} --force

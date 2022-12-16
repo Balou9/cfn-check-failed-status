@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     paths-inore:
-    - "readme.md"
+      - readme.md
 
 env:
   AWS_REGION: us-east-1

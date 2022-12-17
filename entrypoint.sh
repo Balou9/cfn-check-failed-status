@@ -16,6 +16,7 @@ while IFS= read -r line; do
     echo "$line"
   fi
 done <<< "$stack_status_list"
+echo "$stack_status"
 
 if [[ -z "$stack_status" ]]
 then

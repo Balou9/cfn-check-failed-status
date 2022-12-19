@@ -16,6 +16,7 @@ jobs:
     steps:
       - name: clone the repo
         uses: actions/checkout@v3
+        
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.5.3
         with:

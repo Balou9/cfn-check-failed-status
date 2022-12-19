@@ -12,11 +12,12 @@ while IFS= read -r line; do
   then
     stack_status="$line"
     echo "### $line ###"
+    echo ".... STACK STATUS bf ... $stack_status"
   else
     echo "$line"
   fi
 done <<< "$stack_status_list"
-echo "$stack_status"
+echo "... STACK STATUS af ... $stack_status"
 
 if [[ -z "$stack_status" ]]
 then

@@ -11,7 +11,7 @@ echo "RECENT STACK EVENTS:"
 
 while IFS= read -r line; do
   echo $line
-  if [[ "$line" == "CREATE_FAILED" ]] || [[ "$line" == "ROLLBACK_FAILED" ]] || [[ "$line" == "UPDATE_FAILED" ]] || [[ "$line" == "UPDATE_ROLLBACK_FAILED" ]] || [[ "$line" == "DELETE_FAILED" ]]
+  if [[ $line == "CREATE_FAILED" ]] || [[ $line == "ROLLBACK_FAILED" ]] || [[ $line == "UPDATE_FAILED" ]] || [[ $line == "UPDATE_ROLLBACK_FAILED" ]] || [[ $line == "DELETE_FAILED" ]]
   then
     stack_status="$line"
     echo "### $line ###"

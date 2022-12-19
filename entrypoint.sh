@@ -17,7 +17,7 @@ while IFS= read -r line; do
     echo "### $line ###"
     echo ".... STACK STATUS bf ... $stack_status"
   else
-    echo "$line"
+    echo "NON FAILED.....$line"
   fi
 done <<< "$stack_status_list"
 echo "... STACK STATUS af ... $stack_status"

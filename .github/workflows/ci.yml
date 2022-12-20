@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: clone the repo
         uses: actions/checkout@v3
-        
+
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.5.3
         with:
@@ -99,7 +99,7 @@ jobs:
           echo "STACK_NAME=$ENVIRONMENT-create-failed-cfn-check-failed-status" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=$ENVIRONMENT-create-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
-      - name: creates bucket
+      - name: creates bucket to force a CREATE_FAILED which will lead to an ROLLBACK_COMPLETE
         run: |
           aws s3api create-bucket \
           --acl="public-read" \

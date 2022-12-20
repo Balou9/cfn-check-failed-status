@@ -18,12 +18,11 @@ done
 
 if [[ -z "$stack_status" ]]
 then
-  output_msg="$STACK_NAME is in a nonfailed status"
-  echo "$output_msg"
-  echo "{message}={$output_msg}" >> $GITHUB_OUTPUT
+  output_msg="$STACK_NAME is in a nonfailed status. Stack will not be deleted."
 else
   output_msg="$STACK_NAME is in $stack_status status. About to be deleted."
-  echo "$output_msg"
-  echo "{message}={$output_msg}" >> $GITHUB_OUTPUT
   aws cloudformation delete-stack --stack-name=$STACK_NAME
 fi
+
+echo "message=$output_msg" >> $GITHUB_OUTPUT
+echo "$output_msg"

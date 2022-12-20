@@ -18,7 +18,8 @@ while IFS= read -r line; do
   else
     echo "NON FAILED.....$line"
   fi
-done <<< "$stack_status_list"
+done < "$stack_status_list"
+
 echo "... STACK STATUS af ... $stack_status"
 
 if [[ -z "$stack_status" ]]

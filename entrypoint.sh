@@ -6,22 +6,19 @@ stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq ".StackEvents[].ResourceStatus")
 
-echo $stack_status_list
-
 echo "RECENT STACK EVENTS:"
 
 for status in $stack_status_list
 do
   if [ $status = '"CREATE_FAILED"' ] || [ $status = '"ROLLBACK_FAILED"' ] || [ $status = '"UPDATE_FAILED"' ] || [ $status = '"UPDATE_ROLLBACK_FAILED"' ] || [ $status = '"DELETE_FAILED"' ]; then
     stack_status=$status
+    echo "STACK in FAILED STATUS ... $stack_status"
   fi
 done
 
-echo "STACK STATUS af ... $stack_status"
-
 if [[ -z "$stack_status" ]]
 then
-  output_msg="stack name...... $STACK_NAME"
+  output_msg="stack name $STACK_NAME is in a nonfailed status"
   echo "$output_msg"
   # echo "{message}={$output_msg}" >> $GITHUB_OUTPUT
 else

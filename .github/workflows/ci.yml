@@ -58,7 +58,7 @@ jobs:
 
       - name: validate output message of the status check
         run: |
-          echo "Stack status of the previous deployment of $env.STACK_NAME was ${{ steps.checkstatus_create_complete.outputs.message }}"
+          echo "${{ steps.checkstatus_create_complete.outputs.message }}"
 
       - name: delete the create-complete-cfn-check-failed-status test stack
         run: |
@@ -124,4 +124,4 @@ jobs:
 
       - name: validate output message of the status check
         run: |
-          echo "Stack status of the previous deployment of $env.STACK_NAME was ${{ steps.checkstatus_create_failed.outputs.message }}"
+          echo "${{ steps.checkstatus_create_failed.outputs.message }}"

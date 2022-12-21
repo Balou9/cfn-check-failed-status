@@ -31,12 +31,9 @@ jobs:
               --template-body="file://$template"
           done
 
-      - name: map branch 2 test
-        run: |
-          echo "ENVIRONMENT=test" >> $GITHUB_ENV
-
       - name: configure the environment
         run: |
+          echo "ENVIRONMENT=test" >> $GITHUB_ENV
           echo "STACK_NAME=$ENVIRONMENT-create-complete-cfn-check-failed-status" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME=$ENVIRONMENT-create-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
@@ -90,12 +87,9 @@ jobs:
               --template-body="file://$template"
           done
 
-      - name: map branch 2 test
-        run: |
-          echo "ENVIRONMENT=test" >> $GITHUB_ENV
-
       - name: configure the environment
         run: |
+          echo "ENVIRONMENT=test" >> $GITHUB_ENV
           echo "STACK_NAME=$ENVIRONMENT-create-failed-cfn-check-failed-status" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=$ENVIRONMENT-create-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 

@@ -120,7 +120,7 @@ jobs:
 
   test-delete-failed:
     runs-on: ubuntu-latest
-    needs: test-create-complete
+    needs: test-create-failed
     env:
       CFN_TEMPLATES: "./test/stacks/test-delete-failed-stack.yml\n"
     steps:

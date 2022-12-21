@@ -4,14 +4,26 @@
 
 ## wip
 
-A Github action that checks the status of a cloudformation stack and deletes the stack if the previous deployment resolved in a failed status. It resolves the pain to manually delete the stack during the development process.
+A Github action that checks the status of a aws cloudformation stack and deletes the stack if the previous deployment resolved in a failed status. It resolves the pain to manually delete the stack during the development process.
 
+---
+##### inputs
 
-## inputs
+###### `stack-name`
 
-#### `stack-name`
+**Required** The name of the stack to be status checked
 
-**Required** The name of the stack to be checked
+##### outputs
+
+###### `message`
+
+`<stack-name> is in a nonfailed status. Stack will not be deleted.`  
+status message non-failed stack status
+
+`<stack-name>  is in CREATE_FAILED status. About to be deleted.`   
+status message failed stack status
+
+---
 
 ## usage
 
@@ -20,6 +32,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:  
+    # - name: ...
     - name: check status of cloudformation stack prior to deployment
       id: checkstatus
       uses: ./
@@ -33,9 +46,6 @@ jobs:
 name: cd
 
 on: push
-
-env:
-  STACK_NAME: test-stack
 
 jobs:
   deploy:
@@ -64,11 +74,11 @@ jobs:
 
       - name: Get the stack status
         run: |
-          echo "Stack status of the previous deployment of $env.STACK_NAME was ${{ steps.checkstatus.outputs }}"
+          echo "${{ steps.checkstatus.outputs.message }}"
 
       - name: configure the environment
         run: |
-          echo "STACK_NAME=example-stack231" >> $GITHUB_ENV
+          echo "STACK_NAME=test-stack231" >> $GITHUB_ENV
 #          echo ...
 
       - name: deploy cloudformation stack

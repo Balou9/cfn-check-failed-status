@@ -158,9 +158,19 @@ jobs:
 
       - name: populate bucket
         run: |
-          aws s3 cp test/fixtures/example.txt s3://"${{ env.CFN_CHECK_STATUS_DELETE_FAILED_BUCKET_NAME }}"/
+          aws s3 cp test/fixtures/example.txt s3://${{ env.CFN_CHECK_STATUS_DELETE_FAILED_BUCKET_NAME }}/
 
       - name: delete stack (no --force) which should fail
         continue-on-error: true
         run: |
           aws cloudformation delete-stack --stack-name=${{ env.STACK_NAME }}
+
+      - name: test cfn-check-failed-status with a cloudformation stack in DELETE_FAILED status
+        uses: ./
+        id: checkstatus_delete_failed
+        with:
+          cfn-stack-name: ${{ env.STACK_NAME }}
+
+      - name: validate output message of the status check
+        run: |
+          echo "${{ steps.checkstatus_delete_failed.outputs.message }}"

@@ -19,4 +19,4 @@ Resources:
     Properties:
       BucketName: !Ref CfnCheckStatusBucketName
       AccessControl: PublicRead
-    DeletionPolicy: Delete
+    DeletionPolicy: Retain

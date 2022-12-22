@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     paths-ignore:
-      - readme.md
+      - '**.md'
 
 env:
   AWS_REGION: us-east-1

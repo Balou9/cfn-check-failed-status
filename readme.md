@@ -13,12 +13,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:  
-    # - name: ...
-    - name: check status of cloudformation stack prior to deployment
-    id: checkstatus
-    uses: ./
-    with:
-      stack-name: stackstack
+      - name: check status of cloudformation stack prior to deployment
+      - uses: Balou9/cfn-check-failed-status@v0.0.1
+        with:
+          stack-name: example-stack
 ```
 
 #### inputs

@@ -10,8 +10,12 @@ Metadata:
           - CfnCheckStatusBBucketName
 
 Parameters:
-  CfnCheckStatusBucketName:
-    Description: Name of the the test bucket
+  CfnCheckStatusABucketName:
+    Description: Name of the B test bucket
+    Type: String
+
+  CfnCheckStatusBBucketName:
+    Description: Name of the A test bucket
     Type: String
 
 Resources:

@@ -6,7 +6,8 @@ Metadata:
       - Label:
           default: Storage
         Parameters:
-          - CfnCheckStatusBucketName
+          - CfnCheckStatusABucketName
+          - CfnCheckStatusBBucketName
 
 Parameters:
   CfnCheckStatusBucketName:
@@ -14,9 +15,16 @@ Parameters:
     Type: String
 
 Resources:
-  CfnCheckStatusBucket:
+  CfnCheckStatusBucketA:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref CfnCheckStatusBucketName
+      BucketName: !Ref CfnCheckStatusABucketName
+      AccessControl: PublicRead
+    DeletionPolicy: Delete
+
+  CfnCheckStatusBucketB:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref CfnCheckStatusBBucketName
       AccessControl: PublicRead
     DeletionPolicy: Delete

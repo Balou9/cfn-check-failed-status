@@ -145,7 +145,8 @@ jobs:
       - name: configure the environment
         run: |
           echo "STACK_NAME=test-delete-failed-cfn-check-failed-status" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_DELETE_FAILED_BUCKET_NAME=test-delete-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_DELETE_FAILED_A_BUCKET_NAME=test-delete-failed-cfn-check-failed-status-bucket-a" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_DELETE_FAILED_B_BUCKET_NAME=test-delete-failed-cfn-check-failed-status-bucket-b" >> $GITHUB_ENV
 
       - name: deploy the cfn stack
         run: |
@@ -153,7 +154,7 @@ jobs:
             --template-file="test/stacks/test-delete-failed-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
-              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_DELETE_FAILED_BUCKET_NAME }} \
+              CfnCheckStatusABucketName=${{ env.CFN_CHECK_STATUS_DELETE_FAILED_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 

@@ -20,6 +20,9 @@ then
   output_msg="$STACK_NAME is in a nonfailed status. Stack will not be deleted."
 else
   output_msg="$STACK_NAME is in $failed_stack_status status. About to be deleted."
+  bucket_list_abt_delete=$(aws cloudformation describe-stack-events --stack-name=$STACK_NAME \
+    | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | select(.ResourceStatus=="CREATE_COMPLETE")| .PhysicalResourceId')
+  aws s3 rb s3://$bucket_list_abt_delete --force
   aws cloudformation delete-stack --stack-name=$STACK_NAME
 fi
 

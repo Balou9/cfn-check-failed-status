@@ -2,11 +2,25 @@
 
 # cfn-check-failed-status
 
-## wip
+**wip**
 
 A Github action that checks the status of a aws cloudformation stack and deletes the stack if the previous deployment resolved in a failed status. It resolves the pain to manually delete the stack during the development process.
 
----
+## usage
+
+```yml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:  
+    # - name: ...
+    - name: check status of cloudformation stack prior to deployment
+    id: checkstatus
+    uses: ./
+    with:
+      stack-name: stackstack
+```
+
 #### inputs
 
 ###### `stack-name`
@@ -25,70 +39,20 @@ status message failed stack status
 
 ---
 
-## usage
+## motivation
 
-```yml
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:  
-    # - name: ...
-    - name: check status of cloudformation stack prior to deployment
-      id: checkstatus
-      uses: ./
-      with:
-        stack-name: stackstack
-```
+cfn-check-failed-status is driven by the idea to be able to redeploy aws cloudformation stacks
+conveniently. During the development process you discover that your stacks are in
+XXX_FAILED and eventuelly in ROLLBACK_COMPLETE status. If you know redeploy your stack
+the github actions pipeline fail since a stack in ROLLBACK_COMPLETE status cannot be updated.
 
-#### example usage in deployment pipeline
+This action ensures that your pipeline is able to complete every deployment run successfully.
+Of course still your pipeline can fail due to validation or stack errors.
+But by using this action you can
 
-```yml
-name: cd
-
-on: push
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: clone the repo
-        uses: actions/checkout@v2.5.0
-
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v1.5.3
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: validates cloudformation template
-        run: |
-          aws cloudformation validate-template \
-            --template-body="./stack.yml"
-
-      - name: check status of cloudformation stack prior to deployment
-        id: checkstatus
-        uses: ./
-        with:
-          stack-name: ${{ env.STACK_NAME }}
-
-      - name: Get the stack status
-        run: |
-          echo "${{ steps.checkstatus.outputs.message }}"
-
-      - name: configure the environment
-        run: |
-          echo "STACK_NAME=test-stack231" >> $GITHUB_ENV
-#          echo ...
-
-      - name: deploy cloudformation stack
-        run: |
-          aws cloudformation deploy \
-            --template-file=./stack.yml \
-            --stack-name=${{ env.STACK_NAME }} \
-            --parameter-overrides \
-          ...
-```
+- reduce the amount of times you have to manually delete your cloudformation stack in the aws console
+- reduce the amount of times you have to delete relevant stack resources (like S3 Buckets)
+- reduce github action pipeline runs
 
 ## feat: cfn stack deletion on failed status
 

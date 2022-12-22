@@ -154,7 +154,8 @@ jobs:
             --template-file="test/stacks/test-delete-failed-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
-              CfnCheckStatusABucketName=${{ env.CFN_CHECK_STATUS_DELETE_FAILED_BUCKET_NAME }} \
+              CfnCheckStatusABucketName=${{ env.CFN_CHECK_STATUS_DELETE_FAILED_A_BUCKET_NAME }} \
+              CfnCheckStatusBBucketName=${{ env.CFN_CHECK_STATUS_DELETE_FAILED_B_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 

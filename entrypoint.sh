@@ -6,11 +6,9 @@ stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq ".StackEvents[].ResourceStatus")
 
-echo "RECENT STACK EVENTS:"
 for status in $stack_status_list; do
   if [[ $status = '"CREATE_FAILED"' ]] || [[ $status = '"ROLLBACK_FAILED"' ]] || [[ $status = '"UPDATE_FAILED"' ]] || [[ $status = '"UPDATE_ROLLBACK_FAILED"' ]] || [[ $status = '"DELETE_FAILED"' ]]; then
     failed_stack_status=$status
-    echo "STACK in FAILED STATUS ... $failed_stack_status"
   fi
 done
 
@@ -26,7 +24,6 @@ else
     aws s3 rb s3://$bucket --force
   done
 
-  aws s3 rb s3://$bucket_list_abt_delete --force
   aws cloudformation delete-stack --stack-name=$STACK_NAME
 fi
 

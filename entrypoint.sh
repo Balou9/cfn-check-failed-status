@@ -1,13 +1,14 @@
 #!/bin/bash
 STACK_NAME="$1"
-stack_status=""
+failed_stack_status=""
 
 stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq ".StackEvents[].ResourceStatus")
 
 for status in $stack_status_list; do
-  if [[ $status = '"CREATE_FAILED"' ]] || [[ $status = '"ROLLBACK_FAILED"' ]] || [[ $status = '"UPDATE_FAILED"' ]] || [[ $status = '"UPDATE_ROLLBACK_FAILED"' ]] || [[ $status = '"DELETE_FAILED"' ]]; then
+  if [[ $status = '"CREATE_FAILED"' ]] || [[ $status = '"ROLLBACK_FAILED"' ]] || [[ $status = '"UPDATE_FAILED"' ]] || [[ $status = '"UPDATE_ROLLBACK_FAILED"' ]] || [[ $status = '"DELETE_FAILED"' ]];
+  then
     failed_stack_status=$status
   fi
 done
@@ -20,9 +21,12 @@ else
   bucket_list_abt_delete=$(aws cloudformation describe-stack-events --stack-name=$STACK_NAME \
     | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | select(.ResourceStatus=="CREATE_COMPLETE")| .PhysicalResourceId')
 
-  for bucket in $bucket_list_abt_delete; do
-    aws s3 rb s3://$bucket --force
-  done
+  if [[ -z "$bucket_list_abt_delete" ]]
+  then
+    for bucket in $bucket_list_abt_delete; do
+      aws s3 rb s3://$bucket --force
+    done
+  fi
 
   aws cloudformation delete-stack --stack-name=$STACK_NAME
 fi

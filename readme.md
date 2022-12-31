@@ -62,4 +62,5 @@ The following cloudformation stack status will resolve in stack deletion:
 - UPDATE_ROLLBACK_FAILED
 - DELETE_FAILED
 
-see: https://medium.com/nerd-for-tech/cloudformation-status-transition-ea402050c7aa
+see: https://medium.com/nerd-for-tech/cloudformation-status-transition-ea402050c7aa   
+and: https://aws.amazon.com/premiumsupport/knowledge-center/cloudformation-stack-delete-failed/

@@ -120,7 +120,7 @@ jobs:
 
   test-delete-failed:
     runs-on: ubuntu-latest
-    needs: test-update-failed
+    needs: test-create-failed
     env:
       CFN_TEMPLATES: "./test/stacks/test-delete-failed-stack.yml\n"
     steps:
@@ -180,13 +180,20 @@ jobs:
 
   test-update-failed:
     runs-on: ubuntu-latest
-    needs: test-create-failed
+    needs: test-delete-failed
     env:
       CFN_TEMPLATES: "./test/stacks/test-update-failed-stack.yml\n./test/stacks/test-update-failed-stack0.yml\n"
     steps:
       - name: clone the repo
         uses: actions/checkout@v3
 
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.5.3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
       - name: validates all cloudformation templates
         run: |
           printf "${{ env.CFN_TEMPLATES }}" | while read template; do

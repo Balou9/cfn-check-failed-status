@@ -7,6 +7,7 @@ stack_status_list=$(aws cloudformation describe-stack-events \
   | jq ".StackEvents[].ResourceStatus")
 
 for status in $stack_status_list; do
+  echo "$status"
   if [[ $status = '"CREATE_FAILED"' ]] || [[ $status = '"ROLLBACK_FAILED"' ]] || [[ $status = '"UPDATE_FAILED"' ]] || [[ $status = '"UPDATE_ROLLBACK_FAILED"' ]] || [[ $status = '"DELETE_FAILED"' ]];
   then
     failed_stack_status=$status

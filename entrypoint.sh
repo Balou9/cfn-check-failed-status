@@ -34,5 +34,5 @@ else
   aws cloudformation delete-stack --stack-name=$STACK_NAME
 fi
 
-echo "message=$output_msg" >> $GITHUB_OUTPUT
+# echo "message=$output_msg" >> $GITHUB_OUTPUT
 echo "$output_msg"

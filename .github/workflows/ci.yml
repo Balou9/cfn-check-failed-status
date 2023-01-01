@@ -193,7 +193,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          
+
       - name: validates all cloudformation templates
         run: |
           printf "${{ env.CFN_TEMPLATES }}" | while read template; do
@@ -207,7 +207,6 @@ jobs:
           echo "CFN_CHECK_STATUS_UPDATE_FAILED_BUCKET_NAME=test-update-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
       - name: deploy the update-failed-cfn-check-failed-status stack
-        # continue-on-error: true
         run: |
           aws cloudformation deploy \
             --template-file="test/stacks/test-update-failed-stack.yml" \
@@ -218,7 +217,7 @@ jobs:
             --no-fail-on-empty-changeset
 
       - name: redeploy the update-failed-cfn-check-failed-status stack to force UPDATE_FAILED status
-        # continue-on-error: true
+        continue-on-error: true
         run: |
           aws cloudformation deploy \
             --template-file="test/stacks/test-update-failed-stack0.yml" \
@@ -227,3 +226,13 @@ jobs:
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_UPDATE_FAILED_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
+
+      - name: test cfn-check-failed-status with a cloudformation stack in UPDATE_FAILED status
+        uses: ./
+        id: checkstatus_update_failed
+        with:
+          cfn-stack-name: ${{ env.STACK_NAME }}
+
+      - name: validate output message of the status check
+        run: |
+          echo "${{ steps.checkstatus_update_failed.outputs.message }}"

@@ -215,17 +215,17 @@ jobs:
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_UPDATE_FAILED_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
-      # 
-      # - name: redeploy the update-failed-cfn-check-failed-status stack to force UPDATE_FAILED status
-      #   continue-on-error: true
-      #   run: |
-      #     aws cloudformation deploy \
-      #       --template-file="test/stacks/test-update-failed-stack0.yml" \
-      #       --stack-name=${{ env.STACK_NAME }} \
-      #       --parameter-overrides \
-      #         CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_UPDATE_FAILED_BUCKET_NAME }} \
-      #       --capabilities=CAPABILITY_NAMED_IAM \
-      #       --no-fail-on-empty-changeset
+      
+      - name: redeploy the update-failed-cfn-check-failed-status stack to force UPDATE_FAILED status
+        continue-on-error: true
+        run: |
+          aws cloudformation deploy \
+            --template-file="test/stacks/test-update-failed-stack0.yml" \
+            --stack-name=${{ env.STACK_NAME }} \
+            --parameter-overrides \
+              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_UPDATE_FAILED_BUCKET_NAME }} \
+            --capabilities=CAPABILITY_NAMED_IAM \
+            --no-fail-on-empty-changeset
       #
       # - name: test cfn-check-failed-status with a cloudformation stack in UPDATE_FAILED status
       #   uses: ./

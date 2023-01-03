@@ -4,7 +4,7 @@ failed_stack_status=""
 
 stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
-  | jq '.StackEvents[] | select(.LogicalResourceId=="$STACK_NAME") | .ResourceStatus')
+  | jq -r '.StackEvents[] | select(.LogicalResourceId=="$STACK_NAME") | .ResourceStatus')
 
 for status in $stack_status_list; do
   echo "$status"

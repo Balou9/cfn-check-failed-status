@@ -2,12 +2,12 @@
 STACK_NAME="$1"
 failed_stack_status=""
 
-debug_list=$(aws cloudformation describe-stack-events \
-  --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.LogicalResourceId=="$STACK_NAME") | .ResourceStatus'
-)
-
-echo "$debug_list"
+# debug_list=$(aws cloudformation describe-stack-events \
+#   --stack-name="$STACK_NAME" \
+#   | jq -r '.StackEvents[] | select(.LogicalResourceId=="$STACK_NAME") | .ResourceStatus'
+# )
+#
+# echo "$debug_list"
 
 stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \

@@ -31,7 +31,7 @@ else
   aws cloudformation describe-stack-events --stack-name=$STACK_NAME
 
   bucket_list_abt_delete=$(aws cloudformation describe-stack-events --stack-name=$STACK_NAME \
-    | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | select(.ResourceStatus=="CREATE_COMPLETE")| .PhysicalResourceId')
+    | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | select(.ResourceStatus=="CREATE_COMPLETE|CREATE_FAILED") | .PhysicalResourceId')
 
   echo "$bucket_list_abt_delete"
 

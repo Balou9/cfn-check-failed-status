@@ -2,6 +2,7 @@ FROM debian:latest
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update && apt-get install -y \
     curl \
+    john \
     jq \
     unzip
 

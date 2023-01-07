@@ -32,7 +32,7 @@ else
   # delete buckets in FAILED and COMPLETE status
   bucket_list_abt_delete=$(
     aws cloudformation describe-stack-events --stack-name=$STACK_NAME \
-      | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | .PhysicalResourceId | unique'
+      | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | .PhysicalResourceId'
     )
 
   echo "$bucket_list_abt_delete"

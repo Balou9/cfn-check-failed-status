@@ -28,7 +28,8 @@ then
 else
   output_msg="$STACK_NAME is in $failed_stack_status status. About to be deleted."
 
-  aws cloudformation describe-stack-events --stack-name=$STACK_NAME
+  aws cloudformation describe-stack-events --stack-name=$STACK_NAME \
+    | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | .PhysicalResourceId'
   # delete buckets in FAILED and COMPLETE status
   bucket_list_abt_delete=$(
     aws cloudformation describe-stack-events --stack-name=$STACK_NAME \

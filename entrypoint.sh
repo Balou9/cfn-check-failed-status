@@ -30,7 +30,7 @@ else
 
   aws cloudformation describe-stack-events --stack-name=$STACK_NAME \
     # | jq -rs '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | .PhysicalResourceId | unique[]'
-    jq -rs '.StackEvents[]' 
+    jq -r '.StackEvents[]' 
   # delete buckets in FAILED and COMPLETE status
   bucket_list_abt_delete=$(
     aws cloudformation describe-stack-events --stack-name=$STACK_NAME \

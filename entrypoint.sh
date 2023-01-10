@@ -30,9 +30,10 @@ else
   # delete buckets in FAILED and COMPLETE status
   bucket_list_abt_delete=$(
     aws cloudformation describe-stack-events \
-      --stack-name=$STACK_NAME \
-      --query 'StackEvents[?ResourceType==`AWS::S3::Bucket`].PhysicalResourceId'
+      --stack-name=$STACK_NAME \--query 'StackEvents[?ResourceType==`AWS::S3::Bucket`].PhysicalResourceId'
   )
+
+  echo "$bucket_list_abt_delete"
 
   uniq_buckt_to_delete=($(for bucket in "${bucket_list_abt_delete[@]}"; do echo "${bucket}"; done | sort -u))
 

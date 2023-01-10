@@ -37,6 +37,8 @@ else
       | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | .PhysicalResourceId'
     )
 
+  sort "$bucket_list_abt_delete" | uniq -u
+
   echo "$bucket_list_abt_delete"
 
   if [[ ! -z "$bucket_list_abt_delete" ]]

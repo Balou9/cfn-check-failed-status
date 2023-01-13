@@ -38,7 +38,7 @@ else
 
   if [[ ! -z "$bucket_list_abt_delete" ]]
   then
-    for bucket in $uniq_buckt_to_delete; do
+    for bucket in $bucket_list_abt_delete; do
       aws s3 rb s3://$bucket --force
     done
   fi

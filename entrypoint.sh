@@ -15,6 +15,13 @@ for status in $stack_status_list; do
   fi
 done
 
+debug_list=$(aws cloudformation describe-stack-events \
+  --stack-name="$STACK_NAME" \
+  | jq -r '.StackEvents[] | select(.LogicalResourceId=="$STACK_NAME") | .ResourceStatus'
+)
+
+echo "$debug_list"
+
 if [[ -z "$failed_stack_status" ]]
 then
   output_msg="$STACK_NAME is in a nonfailed status. Stack will not be deleted."
@@ -29,7 +36,7 @@ else
 
   echo "$bucket_list_abt_delete"
 
-  if [[ ! -z "$uniq_buckt_to_delete" ]]
+  if [[ ! -z "$bucket_list_abt_delete" ]]
   then
     for bucket in $uniq_buckt_to_delete; do
       aws s3 rb s3://$bucket --force

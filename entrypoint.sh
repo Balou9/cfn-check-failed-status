@@ -2,13 +2,6 @@
 STACK_NAME="$1"
 failed_stack_status=""
 
-# debug_list=$(aws cloudformation describe-stack-events \
-#   --stack-name="$STACK_NAME" \
-#   | jq -r '.StackEvents[] | select(.LogicalResourceId=="$STACK_NAME") | .ResourceStatus'
-# )
-#
-# echo "$debug_list"
-
 stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq -r '.StackEvents[].ResourceStatus'
@@ -27,17 +20,14 @@ then
   output_msg="$STACK_NAME is in a nonfailed status. Stack will not be deleted."
 else
   output_msg="$STACK_NAME is in $failed_stack_status status. About to be deleted."
-  # delete all buckets in FAILED and COMPLETE status
+  # delete all buckets
   bucket_list_abt_delete=$(
     aws cloudformation describe-stack-events \
-      --stack-name=$STACK_NAME \--query 'StackEvents[?ResourceType==`AWS::S3::Bucket`].PhysicalResourceId'
+      --stack-name=$STACK_NAME \
+      | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | .PhysicalResourceId'
   )
 
   echo "$bucket_list_abt_delete"
-
-  uniq_buckt_to_delete=($(for bucket in "${bucket_list_abt_delete[@]}"; do echo "${bucket}"; done | sort -u))
-
-  echo "$uniq_buckt_to_delete"
 
   if [[ ! -z "$uniq_buckt_to_delete" ]]
   then

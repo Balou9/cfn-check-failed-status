@@ -20,7 +20,7 @@ debug_list=$(aws cloudformation describe-stack-events \
   | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | .PhysicalResourceId, .ResourceStatusReason'
 )
 
-echo "$debug_list"
+echo "DEBUG_LIST: $debug_list"
 
 if [[ -z "$failed_stack_status" ]]
 then
@@ -34,7 +34,7 @@ else
       | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | startswith("CREATE")) | select(.ResourceStatusReason != null) | .PhysicalResourceId'
   )
 
-  echo "$bucket_list_abt_delete"
+  echo "BUCKETS_TO_DEL_LIST: $bucket_list_abt_delete"
 
   if [[ ! -z "$bucket_list_abt_delete" ]]
   then

@@ -17,12 +17,8 @@ done
 
 debug_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") |  select(.ResourceStatus | test("CREATE|DELETE")) | .PhysicalResourceId, .ResourceStatusReason'
+  | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket") | select(.ResourceStatus | test("CREATE|DELETE")) | []'
 )
-
-aws cloudformation describe-stack-events \
-  --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.ResourceType=="AWS::S3::Bucket" | [])'
 
 echo "DEBUG_LIST: $debug_list"
 

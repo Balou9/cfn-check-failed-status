@@ -35,7 +35,7 @@ else
   bucket_list_abt_delete=$(
     aws cloudformation describe-stack-events \
       --stack-name=$STACK_NAME \
-      | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | startswith("CREATE")) | select(.ResourceStatusReason != null) | .PhysicalResourceId'
+      | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | test("CREATE|DELETE")) | select(.ResourceStatusReason != null) | .PhysicalResourceId'
   )
 
   echo "BUCKETS_TO_DEL_LIST: $bucket_list_abt_delete"

@@ -124,7 +124,7 @@ jobs:
         run: |
           aws cloudformation delete-stack \
             --stack-name=${{ env.STACK_NAME }}
-# TODO: delete bucket in previous step
+# delete bucket in previous step
           aws s3 rb s3://${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }} --force
 
       - name: validate output message of the status check

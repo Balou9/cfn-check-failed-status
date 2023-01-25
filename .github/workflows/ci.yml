@@ -124,8 +124,15 @@ jobs:
         uses: ./
         id: checkstatus_create_failed
         with:
-          cfn-stack-name: ${{ env.STACK_NAME }}
+          cfn-stack-name: ${{ env.STACK_NAME_2 }}
 
+      - name: delete the create-complete-cfn-check-failed-status test stack
+        run: |
+          aws cloudformation delete-stack \
+            --stack-name=${{ env.STACK_NAME }}
+
+          aws s3 rb s3://${{ env.CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME }} --force
+          
       - name: validate output message of the status check
         run: |
           echo "${{ steps.checkstatus_create_failed.outputs.message }}"

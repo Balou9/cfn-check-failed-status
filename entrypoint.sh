@@ -17,7 +17,7 @@ done
 
 debug_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | to_entries'
+  | jq -r '.StackEvents[] | to_entries | map(select(.ResourceType == "AWS::S3::Bucket"))'
 )
 
 echo "DEBUG_LIST: $debug_list"

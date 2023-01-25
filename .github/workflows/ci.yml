@@ -92,12 +92,6 @@ jobs:
           echo "STACK_NAME_2=test-create-failed-cfn-check-failed-status-2" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=test-create-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME_2=test-create-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
-      #
-      # - name: creates bucket to force a CREATE_FAILED which will lead to an ROLLBACK_COMPLETE
-      #   run: |
-      #     aws s3api create-bucket \
-      #     --acl="public-read" \
-      #     --bucket=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }}
 
       - name: deploy the create-failed-cfn-check-failed-status stack
         run: |
@@ -130,7 +124,7 @@ jobs:
         run: |
           aws cloudformation delete-stack \
             --stack-name=${{ env.STACK_NAME }}
-
+# TODO: delete bucket in previous step
           aws s3 rb s3://${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }} --force
 
       - name: validate output message of the status check

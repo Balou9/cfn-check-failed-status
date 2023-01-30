@@ -20,6 +20,11 @@ debug_list=$(aws cloudformation describe-stack-events \
   | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | test("CREATE_IN_PROGRESS")) | select(.ResourceProperties != null) | .ResourceProperties'
 )
 
+aws cloudformation describe-stack-events \
+  --stack-name="$STACK_NAME" \
+  | jq -r '.StackEvents[]'
+
+
 echo "DEBUG_LIST: $debug_list"
 
 if [[ -z "$failed_stack_status" ]]

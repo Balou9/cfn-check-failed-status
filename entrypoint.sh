@@ -17,7 +17,7 @@ done
 
 debug_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | test("CREATE_IN_PROGRESS")) | select(.ResourceProperties != null) | .ResourceProperties | to_entries'
+  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | test("CREATE_IN_PROGRESS")) | select(.ResourceProperties != null) | .ResourceProperties'
 )
 
 aws cloudformation describe-stack-events \

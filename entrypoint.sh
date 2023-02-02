@@ -14,10 +14,10 @@ for status in $stack_status_list; do
     failed_stack_status=$status
   fi
 done
-
+# enter similar keys to get the names of S3 Buckets which where created initially 
 debug_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus | test("CREATE_IN_PROGRESS")) | [.ResourceType, .PhysicalResourceId, .ResourceProperties, .ResourceStatus]'
+  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | [.ResourceType, .PhysicalResourceId, .ResourceProperties, .ResourceStatus]'
 )
 
 aws cloudformation describe-stack-events \

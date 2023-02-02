@@ -17,7 +17,7 @@ done
 
 debug_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | test("CREATE_IN_PROGRESS")) | select(.ResourceProperties != null) | [.ResourceType, .PhysicalResourceId, .ResourceProperties, .ResourceStatus]'
+  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus | test("CREATE_IN_PROGRESS")) | [.ResourceType, .PhysicalResourceId, .ResourceProperties, .ResourceStatus]'
 )
 
 aws cloudformation describe-stack-events \
@@ -36,7 +36,7 @@ else
   bucket_list_abt_delete=$(
     aws cloudformation describe-stack-events \
       --stack-name=$STACK_NAME \
-      | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | test("CREATE_IN_PROGRESS")) | select(.ResourceProperties != null)  | select(.ResourceStatusReason == "Resource creation Initiated") | .PhysicalResourceId'
+      | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | test("CREATE_IN_PROGRESS")) | select(.ResourceProperties != null)  | select((.ResourceStatusReason | test("already exists")) or .ResourceStatusReason == "Resource creation Initiated") | .PhysicalResourceId'
   )
 
   echo "BUCKETS_TO_DEL_LIST: $bucket_list_abt_delete"

@@ -14,18 +14,10 @@ for status in $stack_status_list; do
     failed_stack_status=$status
   fi
 done
-# enter similar keys to get the names of S3 Buckets which where created initially
-debug_list=$(aws cloudformation describe-stack-events \
-  --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | [.ResourceType, .PhysicalResourceId, .ResourceProperties, .ResourceStatus]'
-)
 
 aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq -r '.StackEvents[]'
-
-
-echo "DEBUG_LIST: $debug_list"
 
 if [[ -z "$failed_stack_status" ]]
 then
@@ -39,7 +31,7 @@ else
       | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | .ResourceProperties'
   )
 
-  echo "BUCKETS_TO_DEL_LIST: $bucket_list_abt_delete"
+  echo "BUCKETS_TO_DEL_LIST before the trim: $bucket_list_abt_delete"
 
   if [[ ! -z "$bucket_list_abt_delete" ]]
   then
@@ -48,20 +40,14 @@ else
       bucketstr1=${bs1[1]}
       bs2=(${bucketstr1//,/ })
       bucket_trimmed=${bs2[0]}
-      
+
       real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
       bucket_list_abt_delete[$i]=$real_bucket
       echo ${bucket_list_abt_delete[$i]}
     done
 
-    # for bucket in $bucket_list_abt_delete; do
-    #   bs1=(${bucket//:/ })
-    #   bucketstr1=${bs1[1]}
-    #   bs2=(${bucketstr1//,/ })
-    #
-    #   bucket_trimmed=${bs2[0]}
-    #   real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
-    # done
+    echo "BUCKETS_TO_DEL_LIST after the trim: $bucket_list_abt_delete"
+
 
     for bucket in $bucket_list_abt_delete; do
       aws s3 rb s3://$bucket --force

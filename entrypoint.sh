@@ -22,6 +22,7 @@ aws cloudformation describe-stack-events \
 if [[ -z "$failed_stack_status" ]]
 then
   output_msg="$STACK_NAME is in a nonfailed status. Stack will not be deleted."
+  echo "$output_msg"
 else
   output_msg="$STACK_NAME is in $failed_stack_status status. About to be deleted."
   # delete all buckets
@@ -52,10 +53,9 @@ else
     for bucket in $bucket_list_abt_delete; do
       aws s3 rb s3://$bucket --force
     done
-  fi
 
   aws cloudformation delete-stack --stack-name=$STACK_NAME
+  echo "$output_msg"
 fi
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT
-echo "$output_msg"

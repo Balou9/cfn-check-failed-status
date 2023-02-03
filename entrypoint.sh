@@ -14,7 +14,7 @@ for status in $stack_status_list; do
     failed_stack_status=$status
   fi
 done
-# enter similar keys to get the names of S3 Buckets which where created initially 
+# enter similar keys to get the names of S3 Buckets which where created initially
 debug_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | [.ResourceType, .PhysicalResourceId, .ResourceProperties, .ResourceStatus]'
@@ -36,13 +36,27 @@ else
   bucket_list_abt_delete=$(
     aws cloudformation describe-stack-events \
       --stack-name=$STACK_NAME \
-      | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select(.ResourceStatus | test("CREATE_IN_PROGRESS")) | select(.ResourceProperties != null)  | select((.ResourceStatusReason | test("already exists")) or .ResourceStatusReason == "Resource creation Initiated") | .PhysicalResourceId'
+      | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | .ResourceProperties'
   )
 
   echo "BUCKETS_TO_DEL_LIST: $bucket_list_abt_delete"
 
   if [[ ! -z "$bucket_list_abt_delete" ]]
   then
+    for ((i=0; i<${#bucket_list_abt_delete[@]}; i++));
+    do
+      echo ${bucket_list_abt_delete[$i]}
+    done
+
+    # for bucket in $bucket_list_abt_delete; do
+    #   bs1=(${bucket//:/ })
+    #   bucketstr1=${bs1[1]}
+    #   bs2=(${bucketstr1//,/ })
+    #
+    #   bucket_trimmed=${bs2[0]}
+    #   real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
+    # done
+
     for bucket in $bucket_list_abt_delete; do
       aws s3 rb s3://$bucket --force
     done

@@ -53,7 +53,8 @@ else
     for bucket in $bucket_list_abt_delete; do
       aws s3 rb s3://$bucket --force
     done
-
+  fi
+  
   aws cloudformation delete-stack --stack-name=$STACK_NAME
   echo "$output_msg"
 fi

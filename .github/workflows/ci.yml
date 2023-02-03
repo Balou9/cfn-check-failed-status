@@ -120,6 +120,11 @@ jobs:
         with:
           cfn-stack-name: ${{ env.STACK_NAME_2 }}
 
+      - name: delete the create-failed-cfn-check-failed-status test stack
+        run: |
+          aws cloudformation delete-stack \
+            --stack-name=${{ env.STACK_NAME }}
+
       - name: validate output message of the status check
         run: |
           echo "${{ steps.checkstatus_create_failed.outputs.message }}"

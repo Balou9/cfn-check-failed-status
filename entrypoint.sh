@@ -43,8 +43,14 @@ else
 
   if [[ ! -z "$bucket_list_abt_delete" ]]
   then
-    for ((i=0; i<${#bucket_list_abt_delete[@]}; i++));
-    do
+    for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
+      bs1=(${bucket_list_abt_delete[$i]//:/ })
+      bucketstr1=${bs1[1]}
+      bs2=(${bucketstr1//,/ })
+      bucket_trimmed=${bs2[0]}
+      
+      real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
+      bucket_list_abt_delete[$i]=$real_bucket
       echo ${bucket_list_abt_delete[$i]}
     done
 

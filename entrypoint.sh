@@ -44,7 +44,7 @@ else
 
       real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
       bucket_list_abt_delete[$i]=$real_bucket
-      echo ${bucket_list_abt_delete[$i]}
+      # echo ${bucket_list_abt_delete[$i]}
     done
 
     echo "BUCKETS_TO_DEL_LIST after the trim: $bucket_list_abt_delete"
@@ -54,7 +54,7 @@ else
       aws s3 rb s3://$bucket --force
     done
   fi
-  
+
   aws cloudformation delete-stack --stack-name=$STACK_NAME
   echo "$output_msg"
 fi

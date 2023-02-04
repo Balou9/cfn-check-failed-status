@@ -52,7 +52,7 @@ else
       # echo ${bucket_list_abt_delete[$i]}
     done
 
-    echo "BUCKETS_TO_DEL_LIST after the trim: $bucket_list_abt_delete"
+    echo "BUCKETS_TO_DEL_LIST after the trim: $bucket_list"
 
 
     for bucket in $bucket_list; do

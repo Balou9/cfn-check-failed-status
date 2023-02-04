@@ -36,6 +36,8 @@ else
 
   if [[ ! -z "$bucket_list_abt_delete" ]]
   then
+    declare -a bucket_list
+
     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
       bs1=(${bucket_list_abt_delete[$i]//:/ })
       bucketstr1=${bs1[1]}
@@ -44,13 +46,16 @@ else
 
       real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
       bucket_list_abt_delete[$i]=$real_bucket
+      echo $real_bucket
+      bucket_list+=("$real_bucket")
+
       # echo ${bucket_list_abt_delete[$i]}
     done
 
     echo "BUCKETS_TO_DEL_LIST after the trim: $bucket_list_abt_delete"
 
 
-    for bucket in $bucket_list_abt_delete; do
+    for bucket in $bucket_list; do
       aws s3 rb s3://$bucket --force
     done
   fi

@@ -43,7 +43,7 @@ else
       bucketstr1=${bs1[1]}
       bs2=(${bucketstr1//,/ })
       bucket_trimmed=${bs2[0]}
-
+##### debug and echo / printf printing in for loops
       real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
       bucket_list_abt_delete[$i]=$real_bucket
       bucket_list+=("$real_bucket")

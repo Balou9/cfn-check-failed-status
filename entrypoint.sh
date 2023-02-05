@@ -47,7 +47,7 @@ else
       real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
       bucket_list_abt_delete[$i]=$real_bucket
       bucket_list+=("$real_bucket")
-      echo "$bucket_list"
+      printf ${#bucket_list[@]}
 
       # echo ${bucket_list_abt_delete[$i]}
     done

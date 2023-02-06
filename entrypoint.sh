@@ -38,23 +38,36 @@ else
   then
     declare -a bucket_list=()
 
-    for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
-      bs1=(${bucket_list_abt_delete[$i]//:/ })
+#     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
+#       bs1=(${bucket_list_abt_delete[$i]//:/ })
+#       bucketstr1=${bs1[1]}
+#       bs2=(${bucketstr1//,/ })
+#       bucket_trimmed=${bs2[0]}
+#       echo "bucket name trimmed: $bucket_trimmed"
+# ##### debug and echo / printf printing in for loops
+#       real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
+#       bucket_list_abt_delete[$i]=$real_bucket
+#       echo "tha real bucket name: $real_bucket"
+#       bucket_list+=("$real_bucket")
+#
+#       # echo ${bucket_list_abt_delete[$i]}
+#     done
+
+    for bucket in $bucket_list_abt_delete; do
+      bs1=($bucket//:/ })
       bucketstr1=${bs1[1]}
       bs2=(${bucketstr1//,/ })
       bucket_trimmed=${bs2[0]}
       echo "bucket name trimmed: $bucket_trimmed"
-##### debug and echo / printf printing in for loops
+    ##### debug and echo / printf printing in for loops
       real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
-      bucket_list_abt_delete[$i]=$real_bucket
       echo "tha real bucket name: $real_bucket"
       bucket_list+=("$real_bucket")
-      printf ${#bucket_list[@]}
 
       # echo ${bucket_list_abt_delete[$i]}
     done
 
-    echo "BUCKETS_TO_DEL_LIST after the trim: ${#bucket_list[@]}"
+    echo "BUCKETS_TO_DEL_LIST after the trim: $bucket_list"
 
 
     for bucket in $bucket_list; do

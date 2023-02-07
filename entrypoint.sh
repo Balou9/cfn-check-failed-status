@@ -54,7 +54,7 @@ else
     done
 
     for bucket in $bucket_list_abt_delete; do
-      echo $bucket
+      echo "steeeep by steep: $bucket"
 
     #   bs1=($bucket//:/ })
     #   bucketstr1=${bs1[1]}

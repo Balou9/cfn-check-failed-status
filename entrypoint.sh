@@ -53,20 +53,9 @@ else
       # echo ${bucket_list_abt_delete[$i]}
     done
 
-    for bucket in $bucket_list_abt_delete; do
+    for bucket in "${bucket_list_abt_delete[@]}" 
+    do
       echo "steeeep by steep: $bucket"
-
-    #   bs1=($bucket//:/ })
-    #   bucketstr1=${bs1[1]}
-    #   bs2=(${bucketstr1//,/ })
-    #   bucket_trimmed=${bs2[0]}
-    #   echo "bucket name trimmed: $bucket_trimmed"
-    # ##### debug and echo / printf printing in for loops
-    #   real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
-    #   echo "tha real bucket name: $real_bucket"
-    #   bucket_list+=("$real_bucket")
-
-      # echo ${bucket_list_abt_delete[$i]}
     done
 
     echo "BUCKETS_TO_DEL_LIST after the trim: $bucket_list"

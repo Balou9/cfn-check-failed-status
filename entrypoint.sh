@@ -53,9 +53,9 @@ else
       # echo ${bucket_list_abt_delete[$i]}
     done
 
-    for bucket in "${bucket_list_abt_delete[@]}" 
+    for i in "${bucket_list_abt_delete[@]}"
     do
-      echo "steeeep by steep: $bucket"
+      echo $i
     done
 
     echo "BUCKETS_TO_DEL_LIST after the trim: $bucket_list"

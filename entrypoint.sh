@@ -53,7 +53,7 @@ else
       # echo ${bucket_list_abt_delete[$i]}
     done
 
-    for i in "${bucket_list_abt_delete[@]}"
+    for i in ${bucket_list_abt_delete[@]}
     do
       echo $i
     done

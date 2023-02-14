@@ -39,6 +39,10 @@ else
     declare -a bucket_list=()
 
     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
+      echo ${bucket_list_abt_delete[i]}
+    done
+
+    for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
       bs1=(${bucket_list_abt_delete[i]//:/ })
       bucketstr1=${bs1[1]}
       bs2=(${bucketstr1//,/ })

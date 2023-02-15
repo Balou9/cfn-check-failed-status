@@ -39,8 +39,7 @@ else
     declare -a bucket_list=()
 
     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
-      echo "round $i"
-      echo ${bucket_list_abt_delete[i]}
+      echo ${bucket_list_abt_delete[i]//:/ }
     done
 
     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do

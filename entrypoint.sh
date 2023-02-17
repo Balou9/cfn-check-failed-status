@@ -52,7 +52,7 @@ else
       bucket_name=$(getBucketName "$bucket")
       printf "\n debug::: testing getBucketName:::: $bucket_name \n"
       bucket_trlist+=("$bucket_name")
-      printf "\n debug::: looking for the bucket name full list per iteration $bucket_trlist \n"
+      printf "\n debug::: looking for the bucket name full list per iteration ${bucket_trlist[@]} \n"
     done
 
     printf "\n debug::: tests getBucketName full result:::: \n"

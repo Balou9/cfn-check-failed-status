@@ -17,16 +17,11 @@ function getBucketName() {
 }
 
 for status in $stack_status_list; do
-  echo "$status"
   if [[ $status = 'CREATE_FAILED' ]] || [[ $status = 'ROLLBACK_FAILED' ]] || [[ $status = 'UPDATE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_FAILED' ]] || [[ $status = 'DELETE_FAILED' ]];
   then
     failed_stack_status=$status
   fi
 done
-
-aws cloudformation describe-stack-events \
-  --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[]'
 
 if [[ -z "$failed_stack_status" ]]
 then
@@ -51,11 +46,7 @@ else
       bucket_trlist+=("$bucket_name")
     done
 
-    printf "\n debug::: tests getBucketName full result:::: \n"
-    echo ${bucket_trlist[@]}
     bucket_list=$(printf "%s\n" "${bucket_trlist[@]}" | sort -u)
-
-    printf "\n BUCKETS_TO_DEL_LIST after the trim: $bucket_list \n"
 
     for bucket in $bucket_list; do
       aws s3 rb s3://$bucket --force

@@ -41,7 +41,7 @@ else
       | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | .ResourceProperties'
   )
 
-  echo "BUCKETS_TO_DEL_LIST before the trim: $bucket_list_abt_delete"
+  printf "\n BUCKETS_TO_DEL_LIST before the trim: $bucket_list_abt_delete \n"
 
   if [[ ! -z "$bucket_list_abt_delete" ]]
   then
@@ -52,8 +52,10 @@ else
       bucket_name=$(getBucketName "$bucket")
       printf "\n debug::: testing getBucketName:::: $bucket_name \n"
       bucket_trlist+=("$bucket_name")
+      printf "\n debug::: looking for the bucket name full list per iteration $bucket_trlist \n"
     done
 
+    echo ${bucket_trlist[@]}
     printf "\n debug:::: tests getBucketName full result::::: $bucket_trlist \n"
 
     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
@@ -71,7 +73,7 @@ else
     done
 
 
-    echo "\n BUCKETS_TO_DEL_LIST after the trim: $bucket_list \n"
+    printf "\n BUCKETS_TO_DEL_LIST after the trim: $bucket_list \n"
 
 
     for bucket in $bucket_list; do

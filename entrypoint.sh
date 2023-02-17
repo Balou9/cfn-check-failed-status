@@ -41,8 +41,6 @@ else
       | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | .ResourceProperties'
   )
 
-  printf "BUCKETS_TO_DEL_LIST before the trim: \n$bucket_list_abt_delete \n"
-
   if [[ ! -z "$bucket_list_abt_delete" ]]
   then
     declare -a bucket_list=()
@@ -50,27 +48,12 @@ else
 
     for bucket in ${bucket_list_abt_delete[@]}; do
       bucket_name=$(getBucketName "$bucket")
-      printf "\n debug::: testing getBucketName:::: $bucket_name \n"
       bucket_trlist+=("$bucket_name")
     done
 
     printf "\n debug::: tests getBucketName full result:::: \n"
     echo ${bucket_trlist[@]}
     bucket_list=$(printf "%s\n" "${bucket_trlist[@]}" | sort -u)
-#
-#     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
-#       bs1=(${bucket_list_abt_delete[i]//:/ })
-#       bucketstr1=${bs1[1]}
-#       bs2=(${bucketstr1//,/ })
-#       bucket_trimmed=${bs2[0]}
-#       printf "\n bucket name trimmed: $bucket_trimmed \n"
-# ##### debug and echo / printf printing in for loops
-#       real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
-#       # bucket_list_abt_delete[i]=$real_bucket
-#       printf "\n tha real bucket name: $real_bucket \n"
-#       bucket_list+=("$real_bucket")
-#       # echo ${bucket_list_abt_delete[i]}
-#     done
 
     printf "\n BUCKETS_TO_DEL_LIST after the trim: $bucket_list \n"
 

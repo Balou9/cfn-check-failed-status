@@ -52,11 +52,11 @@ else
       bucket_name=$(getBucketName "$bucket")
       printf "\n debug::: testing getBucketName:::: $bucket_name \n"
       bucket_trlist+=("$bucket_name")
-      printf "\n debug::: looking for the bucket name full list per iteration ${bucket_trlist[@]} \n"
     done
 
     printf "\n debug::: tests getBucketName full result:::: \n"
     echo ${bucket_trlist[@]}
+    printf "%s\n" "${bucket_trlist[@]}" | sort -u
 
     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
       bs1=(${bucket_list_abt_delete[i]//:/ })

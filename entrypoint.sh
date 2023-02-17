@@ -54,24 +54,24 @@ else
       bucket_trlist+=("$bucket_name")
     done
 
-    printf "debug:::: tests getBucketName full result::::: $bucket_trlist"
+    printf "\n debug:::: tests getBucketName full result::::: $bucket_trlist \n"
 
     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
       bs1=(${bucket_list_abt_delete[i]//:/ })
       bucketstr1=${bs1[1]}
       bs2=(${bucketstr1//,/ })
       bucket_trimmed=${bs2[0]}
-      printf "bucket name trimmed: $bucket_trimmed"
+      printf "\n bucket name trimmed: $bucket_trimmed \n"
 ##### debug and echo / printf printing in for loops
       real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
       # bucket_list_abt_delete[i]=$real_bucket
-      printf "tha real bucket name: $real_bucket"
+      printf "\n tha real bucket name: $real_bucket \n"
       bucket_list+=("$real_bucket")
       # echo ${bucket_list_abt_delete[i]}
     done
 
 
-    echo "BUCKETS_TO_DEL_LIST after the trim: $bucket_list"
+    echo "\n BUCKETS_TO_DEL_LIST after the trim: $bucket_list \n"
 
 
     for bucket in $bucket_list; do

@@ -55,7 +55,8 @@ else
       printf "\n debug::: looking for the bucket name full list per iteration $bucket_trlist \n"
     done
 
-    printf "\n debug::: tests getBucketName full result:::: ${bucket_trlist[@]} \n"
+    printf "\n debug::: tests getBucketName full result:::: \n"
+    echo ${bucket_trlist[@]}
 
     for ((i=0; i<${#bucket_list_abt_delete[@]}; i++)); do
       bs1=(${bucket_list_abt_delete[i]//:/ })

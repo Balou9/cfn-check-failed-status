@@ -2,11 +2,6 @@
 STACK_NAME="$1"
 failed_stack_status=""
 
-stack_status_list=$(aws cloudformation describe-stack-events \
-  --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[].ResourceStatus'
-)
-
 function getBucketName() {
   bs1=(${1//:/ })
   bucketstr1=${bs1[1]}
@@ -16,12 +11,22 @@ function getBucketName() {
   printf "$real_bucket"
 }
 
+stack_status_list=$(aws cloudformation describe-stack-events \
+  --stack-name="$STACK_NAME" \
+  | jq -r '.StackEvents[].ResourceStatus'
+)
+
 for status in $stack_status_list; do
+  echo "$status"
   if [[ $status = 'CREATE_FAILED' ]] || [[ $status = 'ROLLBACK_FAILED' ]] || [[ $status = 'UPDATE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_FAILED' ]] || [[ $status = 'DELETE_FAILED' ]];
   then
     failed_stack_status=$status
   fi
 done
+
+aws cloudformation describe-stack-events \
+  --stack-name="$STACK_NAME" \
+  | jq -r '.StackEvents[]'
 
 if [[ -z "$failed_stack_status" ]]
 then

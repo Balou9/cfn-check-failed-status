@@ -64,3 +64,7 @@ The following cloudformation stack status will resolve in stack deletion:
 
 see: https://medium.com/nerd-for-tech/cloudformation-status-transition-ea402050c7aa   
 and: https://aws.amazon.com/premiumsupport/knowledge-center/cloudformation-stack-delete-failed/
+
+# License
+
+[GPL-2.0](docs/license.md)

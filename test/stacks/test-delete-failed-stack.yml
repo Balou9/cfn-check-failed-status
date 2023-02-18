@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: cfn-check-failed-status DELETE_FAILED stack
+Metadata:
+  AWS::Cloudformation::Interface:
+    Parametergroups:
+      - Label:
+          default: Storage
+        Parameters:
+          - CfnCheckStatusABucketName
+          - CfnCheckStatusBBucketName
+
+Parameters:
+  CfnCheckStatusABucketName:
+    Description: Name of the B test bucket
+    Type: String
+
+  CfnCheckStatusBBucketName:
+    Description: Name of the A test bucket
+    Type: String
+
+Resources:
+  CfnCheckStatusBucketA:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref CfnCheckStatusABucketName
+      AccessControl: PublicRead
+    DeletionPolicy: Delete
+
+  CfnCheckStatusBucketB:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref CfnCheckStatusBBucketName
+      AccessControl: PublicRead
+    DeletionPolicy: Delete

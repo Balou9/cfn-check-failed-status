@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: cfn-check-failed-status CREATE_COMPLETE stack
+Metadata:
+  AWS::Cloudformation::Interface:
+    Parametergroups:
+      - Label:
+          default: Storage
+        Parameters:
+          - CfnCheckStatusBucketName
+
+Parameters:
+  CfnCheckStatusBucketName:
+    Description: Name of the the test bucket
+    Type: String
+
+Resources:
+  CfnCheckStatusBucketA:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref CfnCheckStatusBucketName
+      AccessControl: PublicRead
+    DeletionPolicy: Delete
+
+  CfnCheckStatusBucketB:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref CfnCheckStatusBucketName
+      AccessControl: PublicRead
+    DeletionPolicy: Delete

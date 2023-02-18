@@ -1,12 +1,12 @@
 name: cfn-check-failed-status
-description: Checks the status of the cloudformation stack and deletes the stack if the last deployment led to a "failed" stack status.
+description: Checks the status of the cloudformation stack and deletes the stack if the last deployment led to a "XXX_FAILED" stack status.
 inputs:
   cfn-stack-name:
     description: name of the cloudformation stack to be status checked
     required: true
 outputs:
   message:
-    description: message indicating whether the stack was in failed status or not
+    description: message indicating whether the stack was in "XXX_FAILED" status or not
 runs:
   using: docker
   image: Dockerfile

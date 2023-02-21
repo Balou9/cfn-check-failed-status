@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:  
       - name: check status of cloudformation stack prior to deployment
-      - uses: Balou9/cfn-check-failed-status@v0.0.1
+      - uses: Balou9/cfn-check-failed-status@v0.1
         with:
           stack-name: example-stack
 ```

@@ -16,12 +16,12 @@ jobs:
       - name: check status of cloudformation stack prior to deployment
       - uses: Balou9/cfn-check-failed-status@v0.1
         with:
-          stack-name: example-stack
+          cfn-stack-name: example-stack
 ```
 
 #### inputs
 
-###### `stack-name`
+###### `cfn-stack-name`
 
 **Required** The name of the stack to be status checked
 
@@ -62,8 +62,8 @@ The following cloudformation stack status will resolve in stack deletion:
 - UPDATE_ROLLBACK_FAILED
 - DELETE_FAILED
 
-see: https://medium.com/nerd-for-tech/cloudformation-status-transition-ea402050c7aa   
-and: https://aws.amazon.com/premiumsupport/knowledge-center/cloudformation-stack-delete-failed/
+<!-- see: https://medium.com/nerd-for-tech/cloudformation-status-transition-ea402050c7aa   
+and: https://aws.amazon.com/premiumsupport/knowledge-center/cloudformation-stack-delete-failed/ -->
 
 # License
 

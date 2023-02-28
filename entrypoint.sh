@@ -59,6 +59,10 @@ else
   fi
 
   aws cloudformation delete-stack --stack-name=$STACK_NAME
+  sleep 30
+  aws cloudformation describe-stack-events \
+    --stack-name="$STACK_NAME" \
+    | jq -r '.StackEvents[]'
   echo "$output_msg"
 fi
 

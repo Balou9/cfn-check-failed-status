@@ -7,8 +7,8 @@ function getBucketName() {
   bucketstr1=${bs1[1]}
   bs2=(${bucketstr1//,/ })
   bucket_trimmed=${bs2[0]}
-  real_bucket=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
-  printf "$real_bucket"
+  real_bucket_name=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
+  printf "$real_bucket_name"
 }
 
 stack_status_list=$(aws cloudformation describe-stack-events \
@@ -58,6 +58,7 @@ else
     done
   fi
 
+  date +%T
   aws cloudformation delete-stack --stack-name=$STACK_NAME
   sleep 30
   aws cloudformation describe-stack-events \

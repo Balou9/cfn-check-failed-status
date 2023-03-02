@@ -64,8 +64,9 @@ else
   aws cloudformation describe-stack-events \
     --stack-name="$STACK_NAME" \
     | jq -r '.StackEvents[]'
-
-  aws cloudformation list-stacks --stack-status-filter="DELETE_COMPLETE" | jq '.StackSummaries[] | select(.StackName == "$STACK_NAME") | .StackName .CreationTime .DeletionTime .StackStatus'
+  
+  aws cloudformation list-stacks --stack-status-filter="DELETE_COMPLETE" \
+    | jq '.StackSummaries[] | select(.StackName == "$STACK_NAME") | .StackName, .CreationTime, .DeletionTime, .StackStatus'
   echo "$output_msg"
 fi
 

@@ -70,7 +70,7 @@ else
       # '.StackSummaries[] | select(.StackName == $STACK_NAME) | select(.DeletionTime | startswith('\"$DELETION_TIME\"')) | .'
 
       echo "DEBUG: DELETION TIME STAMP:::::::$deletion_ts\n"
-      # echo "DEBUG: LAST STACK $STACKNAME DELETION TIME STAMP:::::::$last_stack_deletion_ts\n"
+      echo "DEBUG: LAST STACK $STACKNAME DELETION TIME STAMP:::::::$last_stack_deletion_ts\n"
 
   # [[ "$last_stack_deletion_ts" == "$deletion_ts"* ]] && echo "deletion time verified" || echo "deletion time NOT verified" && exit 1
 

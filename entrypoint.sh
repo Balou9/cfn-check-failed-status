@@ -65,12 +65,12 @@ else
   last_stack_deletion_ts=$(aws cloudformation list-stacks --stack-status-filter="DELETE_COMPLETE" \
     | jq -r \
       --arg STACK_NAME "$STACK_NAME" \
-      '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .')
+      '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .DeletionTime')
 
       # '.StackSummaries[] | select(.StackName == $STACK_NAME) | select(.DeletionTime | startswith('\"$DELETION_TIME\"')) | .'
 
-      echo "DEBUG: DELETION TIME STAMP:::::::$deletion_ts\n"
-      echo "DEBUG: LAST STACK $STACKNAME DELETION TIME STAMP:::::::$last_stack_deletion_ts\n"
+      echo "DEBUG: DELETION TIME STAMP:::::::$deletion_ts"
+      echo "DEBUG: LAST STACK $STACKNAME DELETION TIME STAMP:::::::$last_stack_deletion_ts"
 
   # [[ "$last_stack_deletion_ts" == "$deletion_ts"* ]] && echo "deletion time verified" || echo "deletion time NOT verified" && exit 1
 

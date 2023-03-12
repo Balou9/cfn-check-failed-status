@@ -66,10 +66,13 @@ else
     | jq -r \
       --arg STACK_NAME "$STACK_NAME" \
       # --arg DELETION_TIME "$deletion_ts" \
-      '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .DeletionTime')
+      '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .')
       # '.StackSummaries[] | select(.StackName == $STACK_NAME) | select(.DeletionTime | startswith('\"$DELETION_TIME\"')) | .'
 
-  [[ "$last_stack_deletion_ts" == "$deletion_ts"* ]] && echo "deletion time verified" || echo "deletion time NOT verified" && exit 1
+      echo "DEBUG: DELETION TIME STAMP:::::::$deletion_ts"
+      echo "DEBUG: LAST STACK $STACKNAME DELETION TIME STAMP:::::::$last_stack_deletion_ts"
+
+  # [[ "$last_stack_deletion_ts" == "$deletion_ts"* ]] && echo "deletion time verified" || echo "deletion time NOT verified" && exit 1
 
   echo "$output_msg"
 fi

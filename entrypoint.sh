@@ -58,16 +58,19 @@ else
     done
   fi
 
-  delete_ts=$(date +%FT%H:%M)
+  deletion_ts=$(date +%FT%H:%M)
   aws cloudformation delete-stack --stack-name=$STACK_NAME
   sleep 5
 
-  aws cloudformation list-stacks --stack-status-filter="DELETE_COMPLETE" \
+  last_stack_deletion_ts=$(aws cloudformation list-stacks --stack-status-filter="DELETE_COMPLETE" \
     | jq -r \
       --arg STACK_NAME "$STACK_NAME" \
-      --arg DELETION_TIME "$delete_ts" \
-      '.StackSummaries[] | select(.StackName == $STACK_NAME) | .'
+      # --arg DELETION_TIME "$deletion_ts" \
+      '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .DeletionTime')
       # '.StackSummaries[] | select(.StackName == $STACK_NAME) | select(.DeletionTime | startswith('\"$DELETION_TIME\"')) | .'
+
+  [[ "$last_stack_deletion_ts" == "$deletion_ts"* ]] && echo "deletion time verified" || echo "deletion time NOT verified" && exit 1
+
   echo "$output_msg"
 fi
 

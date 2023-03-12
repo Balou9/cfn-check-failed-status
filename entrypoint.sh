@@ -58,15 +58,16 @@ else
     done
   fi
 
-  date +%T
+  delete_ts=$(date +%FT%H:%M)
   aws cloudformation delete-stack --stack-name=$STACK_NAME
-  sleep 30
-  aws cloudformation describe-stack-events \
-    --stack-name="$STACK_NAME" \
-    | jq -r '.StackEvents[]'
+  sleep 5
 
   aws cloudformation list-stacks --stack-status-filter="DELETE_COMPLETE" \
-    | jq '.StackSummaries[]'
+    | jq -r \
+      --arg STACK_NAME "$STACK_NAME" \
+      --arg DELETION_TIME "$delete_ts" \
+      '.StackSummaries[] | select(.StackName == $STACK_NAME) | .'
+      # '.StackSummaries[] | select(.StackName == $STACK_NAME) | select(.DeletionTime | startswith('\"$DELETION_TIME\"')) | .'
   echo "$output_msg"
 fi
 

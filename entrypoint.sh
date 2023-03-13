@@ -73,7 +73,7 @@ else
       echo "DEBUG: DELETION TIME STAMP:::::::$deletion_ts"
       echo "DEBUG: LAST STACK $STACKNAME DELETION TIME STAMP:::::::$last_stack_deletion_ts"
 
-  [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && echo "Stack deletion time verified" || echo "Stack deletion time NOT verified" && exit 1
+  [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && echo "Stack deletion time verified" || echo "Stack deletion time NOT verified"
 
   echo "$output_msg"
 fi

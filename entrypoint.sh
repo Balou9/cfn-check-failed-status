@@ -11,6 +11,20 @@ function getBucketName() {
   printf "$real_bucket_name"
 }
 
+function verifyStackDeletion() {
+  deletion_ts=$(date +%FT%H:%M)
+  deletion_allowed_range_ts=$(date -d "+1 min" +%FT%H:%M)
+  sleep 5
+
+  last_stack_deletion_ts=$(aws cloudformation list-stacks --stack-status-filter="DELETE_COMPLETE" \
+    | jq -r \
+      --arg STACK_NAME "$1" \
+      '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .DeletionTime'
+  )
+
+  [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && echo "Stack deletion time verified at $deletion_ts" || echo "Stack deletion time NOT verified, check the aws console if the stack $STACK_NAME is really deleted."
+}
+
 stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq -r '.StackEvents[].ResourceStatus'
@@ -24,9 +38,9 @@ for status in $stack_status_list; do
   fi
 done
 
-# aws cloudformation describe-stack-events \
-#   --stack-name="$STACK_NAME" \
-#   | jq -r '.StackEvents[]'
+aws cloudformation describe-stack-events \
+  --stack-name="$STACK_NAME" \
+  | jq -r '.StackEvents[]'
 
 if [[ -z "$failed_stack_status" ]]
 then
@@ -39,7 +53,7 @@ else
     aws cloudformation describe-stack-events \
       --stack-name=$STACK_NAME \
       | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | .ResourceProperties'
-  )
+    )
 
   if [[ ! -z "$bucket_list_abt_delete" ]]
   then
@@ -58,23 +72,8 @@ else
     done
   fi
 
-  deletion_ts=$(date +%FT%H:%M)
-  deletion_allowed_range_ts=$(date -d "+1 min" +%FT%H:%M)
   aws cloudformation delete-stack --stack-name=$STACK_NAME
-  sleep 5
-
-  last_stack_deletion_ts=$(aws cloudformation list-stacks --stack-status-filter="DELETE_COMPLETE" \
-    | jq -r \
-      --arg STACK_NAME "$STACK_NAME" \
-      '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .DeletionTime')
-
-      # '.StackSummaries[] | select(.StackName == $STACK_NAME) | select(.DeletionTime | startswith('\"$DELETION_TIME\"')) | .'
-
-      echo "DEBUG: DELETION TIME STAMP:::::::$deletion_ts"
-      echo "DEBUG: LAST STACK $STACKNAME DELETION TIME STAMP:::::::$last_stack_deletion_ts"
-
-  [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && echo "Stack deletion time verified" || echo "Stack deletion time NOT verified"
-
+  verifyStackDeletion "$STACK_NAME"
   echo "$output_msg"
 fi
 

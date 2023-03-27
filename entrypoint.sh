@@ -15,13 +15,11 @@ function verifyStackDeletion() {
   deletion_ts=$(date +%FT%H:%M)
   deletion_allowed_range_ts=$(date -d "+1 min" +%FT%H:%M)
   sleep 5
-
   last_stack_deletion_ts=$(aws cloudformation list-stacks --stack-status-filter="DELETE_COMPLETE" \
     | jq -r \
       --arg STACK_NAME "$1" \
       '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .DeletionTime'
   )
-
   [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && echo "Stack deletion time of the stack $1 verified at $deletion_ts" || echo "Stack deletion time NOT verified, check the aws console if the stack $1 is really deleted."
 }
 

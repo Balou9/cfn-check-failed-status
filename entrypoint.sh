@@ -25,7 +25,7 @@ function verifyStackDeletion() {
 
 stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[].ResourceStatus'
+  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus'
 )
 # check the status of the last stack event and save the status to failed_stack_status
 for status in $stack_status_list; do

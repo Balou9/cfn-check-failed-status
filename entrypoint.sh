@@ -38,7 +38,7 @@ done
 
 aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus .ResourceType'
+  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus + " " + .ResourceType'
 
 if [[ -z "$failed_stack_status" ]]
 then

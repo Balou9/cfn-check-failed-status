@@ -54,13 +54,17 @@ But by using this action you can
 
 ## feat: cfn stack deletion on failed status
 
-The following cloudformation stack status will resolve in stack deletion:
 
-- CREATE_FAILED
+- CREATE_FAILED (stack creation failed )
+- DELETE_FAILED (stack deletion failed)
+- UPDATE_ROLLBACK_COMPLETE (stack resource update failed)
+
+
+**todo**
+
 - ROLLBACK_FAILED
 - UPDATE_FAILED
 - UPDATE_ROLLBACK_FAILED
-- DELETE_FAILED
 
 <!-- see: https://medium.com/nerd-for-tech/cloudformation-status-transition-ea402050c7aa   
 and: https://aws.amazon.com/premiumsupport/knowledge-center/cloudformation-stack-delete-failed/ -->

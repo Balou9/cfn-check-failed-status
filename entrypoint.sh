@@ -27,7 +27,7 @@ stack_status_list=$(aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus'
 )
-# check the status of the last stack event and save the status to failed_stack_status
+# check and save final stack status
 for status in $stack_status_list; do
   echo "$status"
   if [[ $status = 'CREATE_FAILED' ]] || [[ $status = 'DELETE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_COMPLETE' ]];

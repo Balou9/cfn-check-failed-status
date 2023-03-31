@@ -53,14 +53,14 @@ function debuggingGetStackStatus() {
 function handleStackStatus() {
   if [[ -z "$1" ]]
   then
-    output_msg="$2 is in a nonfailed status. Stack will not be deleted."
+    output_msg="$STACK_NAME is in a nonfailed status. Stack will not be deleted."
     echo "$output_msg"
   else
-    output_msg="$2 is in $1 status. About to be deleted."
+    output_msg="$STACK_NAME is in $1 status. About to be deleted."
     # delete all buckets
     bucket_list_abt_delete=$(
       aws cloudformation describe-stack-events \
-        --stack-name=$2 \
+        --stack-name=$STACK_NAME \
         | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | .ResourceProperties'
       )
 
@@ -82,8 +82,8 @@ function handleStackStatus() {
     fi
 
     echo "$output_msg"
-    aws cloudformation delete-stack --stack-name=$2
-    verifyStackDeletion "$2"
+    aws cloudformation delete-stack --stack-name=$STACK_NAME
+    verifyStackDeletion "$STACK_NAME"
   fi
 }
 
@@ -98,6 +98,6 @@ echo "$failed_stack_status"
 echo "DEBUG::::::::::::::: get stack status"
 debuggingGetStackStatus $STACK_NAME
 
-handleStackStatus $failed_stack_status $STACK_NAME
+handleStackStatus $failed_stack_status
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT

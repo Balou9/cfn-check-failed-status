@@ -23,18 +23,27 @@ function verifyStackDeletion() {
   [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && echo "Stack deletion time of the stack $1 verified at $deletion_ts" || echo "Stack deletion time NOT verified, check the aws console if the stack $1 is really deleted."
 }
 
-stack_status_list=$(aws cloudformation describe-stack-events \
-  --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus'
-)
-# check and save final stack status
-for status in $stack_status_list; do
-  # echo "$status"
-  if [[ $status = 'CREATE_FAILED' ]] || [[ $status = 'DELETE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_COMPLETE' ]];
-  then
-    failed_stack_status=$status
-  fi
-done
+function getStackStatusList() {
+  list=$(aws cloudformation describe-stack-events \
+    --stack-name="$1" \
+    | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus')
+  printf "$list"
+}
+
+function getStackStatus () {
+  # check and save final stack status
+  for status in $stack_status_list; do
+    # echo "$status"
+    if [[ $status = 'CREATE_FAILED' ]] || [[ $status = 'DELETE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_COMPLETE' ]];
+    then
+      stack_status=$status
+    fi
+  done
+  printf "$stack_status"
+}
+
+stack_status_list=$(getStackStatusList "$STACK_NAME")
+failed_stack_status=$(getStackStatus "$stack_status_list")
 
 aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \

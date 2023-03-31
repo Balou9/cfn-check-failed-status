@@ -50,6 +50,43 @@ function debuggingGetStackStatus() {
   printf "$statuuus"
 }
 
+function handleStackStatus() {
+  if [[ -z "$1" ]]
+  then
+    output_msg="$2 is in a nonfailed status. Stack will not be deleted."
+    echo "$output_msg"
+  else
+    output_msg="$2 is in $1 status. About to be deleted."
+    # delete all buckets
+    bucket_list_abt_delete=$(
+      aws cloudformation describe-stack-events \
+        --stack-name=$2 \
+        | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | .ResourceProperties'
+      )
+
+    if [[ ! -z "$bucket_list_abt_delete" ]]
+    then
+      declare -a bucket_list=()
+      declare -a bucket_trlist=()
+
+      for bucket in ${bucket_list_abt_delete[@]}; do
+        bucket_name=$(getBucketName "$bucket")
+        bucket_trlist+=("$bucket_name")
+      done
+
+      bucket_list=$(printf "%s\n" "${bucket_trlist[@]}" | sort -u)
+
+      for bucket in $bucket_list; do
+        aws s3 rb s3://$bucket --force
+      done
+    fi
+
+    echo "$output_msg"
+    aws cloudformation delete-stack --stack-name=$2
+    verifyStackDeletion "$2"
+  fi
+}
+
 echo "Get stack status list:::::::::::::::"
 stack_status_list=$(getStackStatusList "$STACK_NAME")
 echo "$stack_status_list"
@@ -61,40 +98,6 @@ echo "$failed_stack_status"
 echo "DEBUG::::::::::::::: get stack status"
 debuggingGetStackStatus $STACK_NAME
 
-
-if [[ -z "$failed_stack_status" ]]
-then
-  output_msg="$STACK_NAME is in a nonfailed status. Stack will not be deleted."
-  echo "$output_msg"
-else
-  output_msg="$STACK_NAME is in $failed_stack_status status. About to be deleted."
-  # delete all buckets
-  bucket_list_abt_delete=$(
-    aws cloudformation describe-stack-events \
-      --stack-name=$STACK_NAME \
-      | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | .ResourceProperties'
-    )
-
-  if [[ ! -z "$bucket_list_abt_delete" ]]
-  then
-    declare -a bucket_list=()
-    declare -a bucket_trlist=()
-
-    for bucket in ${bucket_list_abt_delete[@]}; do
-      bucket_name=$(getBucketName "$bucket")
-      bucket_trlist+=("$bucket_name")
-    done
-
-    bucket_list=$(printf "%s\n" "${bucket_trlist[@]}" | sort -u)
-
-    for bucket in $bucket_list; do
-      aws s3 rb s3://$bucket --force
-    done
-  fi
-
-  echo "$output_msg"
-  aws cloudformation delete-stack --stack-name=$STACK_NAME
-  verifyStackDeletion "$STACK_NAME"
-fi
+handleStackStatus $failed_stack_status $STACK_NAME
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT

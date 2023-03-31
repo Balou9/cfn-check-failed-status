@@ -29,16 +29,16 @@ stack_status_list=$(aws cloudformation describe-stack-events \
 )
 # check and save final stack status
 for status in $stack_status_list; do
-  echo "$status"
+  # echo "$status"
   if [[ $status = 'CREATE_FAILED' ]] || [[ $status = 'DELETE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_COMPLETE' ]];
   then
     failed_stack_status=$status
   fi
 done
-
-aws cloudformation describe-stack-events \
-  --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus + " " + .ResourceType'
+#
+# aws cloudformation describe-stack-events \
+#   --stack-name="$STACK_NAME" \
+#   | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus + " " + .ResourceType'
 
 if [[ -z "$failed_stack_status" ]]
 then
@@ -70,9 +70,9 @@ else
     done
   fi
 
+  echo "$output_msg"
   aws cloudformation delete-stack --stack-name=$STACK_NAME
   verifyStackDeletion "$STACK_NAME"
-  echo "$output_msg"
 fi
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT

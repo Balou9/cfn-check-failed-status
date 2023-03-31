@@ -52,9 +52,11 @@ function debuggingGetStackStatus() {
 
 echo "Get stack status list:::::::::::::::"
 stack_status_list=$(getStackStatusList "$STACK_NAME")
+echo "$stack_status_list"
 
 echo "Get failed stack status :::::::::::::::"
 failed_stack_status=$(getStackStatus "$stack_status_list")
+echo "$failed_stack_status"
 
 echo "DEBUG::::::::::::::: get stack status"
 debuggingGetStackStatus $STACK_NAME

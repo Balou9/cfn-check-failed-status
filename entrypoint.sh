@@ -31,6 +31,7 @@ function getStackStatusList() {
 }
 
 function getStackStatus () {
+  echo "Get stack status:::::::::::::::"
   # check and save final stack status
   for status in $stack_status_list; do
     # echo "$status"
@@ -42,12 +43,19 @@ function getStackStatus () {
   printf "$stack_status"
 }
 
+function debuggingGetStackStatus() {
+  echo "DEBUG::::::::::::::: get stack status"
+  statuuus=$(aws cloudformation describe-stack-events \
+    --stack-name="$1" \
+    | jq -r '.StackEvents[]')
+  #statements
+  printf "$statuuus"
+}
+
 stack_status_list=$(getStackStatusList "$STACK_NAME")
 failed_stack_status=$(getStackStatus "$stack_status_list")
+debuggingGetStackStatus $STACK_NAME
 
-aws cloudformation describe-stack-events \
-  --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[].ResourceStatus + " " + .StackEvents[].ResourceType'
 
 if [[ -z "$failed_stack_status" ]]
 then

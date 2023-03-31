@@ -35,10 +35,10 @@ for status in $stack_status_list; do
     failed_stack_status=$status
   fi
 done
-#
-# aws cloudformation describe-stack-events \
-#   --stack-name="$STACK_NAME" \
-#   | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus + " " + .ResourceType'
+
+aws cloudformation describe-stack-events \
+  --stack-name="$STACK_NAME" \
+  | jq -r '.StackEvents[].ResourceStatus + " " + .StackEvents[].ResourceType'
 
 if [[ -z "$failed_stack_status" ]]
 then

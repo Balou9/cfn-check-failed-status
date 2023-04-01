@@ -94,9 +94,11 @@ failed_stack_status=$(getStackStatus "$stack_status_list")
 printf "$failed_stack_status \n"
 
 printf "\n DEBUG::::::::::::::: debuggingGetStackStatus \n"
-debuggingGetStackStatus $STACK_NAME
+debugging_stack_status=$(debuggingGetStackStatus $STACK_NAME)
+printf "$debugging_stack_status \n"
 
 printf "\n DEBUG::::::::::::::: handleStackStatus \n"
-handleStackStatus $failed_stack_status
+handle_stack_status=$(handleStackStatus $failed_stack_status)
+printf "$handle_stack_status \n"
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT

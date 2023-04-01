@@ -20,7 +20,7 @@ function verifyStackDeletion() {
       --arg STACK_NAME "$1" \
       '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .DeletionTime'
   )
-  [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && echo "Stack deletion time of the stack $1 verified at $deletion_ts" || echo "Stack deletion time NOT verified, check the aws console if the stack $1 is really deleted."
+  [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && printf "Stack deletion time of the stack $1 verified at $deletion_ts" || printf "Stack deletion time NOT verified, check the aws console if the stack $1 is really deleted."
 }
 
 function getStackStatusList() {
@@ -46,7 +46,6 @@ function debuggingGetStackStatus() {
   statuuus=$(aws cloudformation describe-stack-events \
     --stack-name="$1" \
     | jq -r '.StackEvents[]')
-  #statements
   printf "$statuuus"
 }
 
@@ -87,17 +86,18 @@ function handleStackStatus() {
   fi
 }
 
-echo "Get stack status list:::::::::::::::"
+echo "DEBUG::::::::::::::: Get stack status list"
 stack_status_list=$(getStackStatusList "$STACK_NAME")
 echo "$stack_status_list"
 
-echo "Get failed stack status :::::::::::::::"
+echo "DEBUG::::::::::::::: Get failed stack status"
 failed_stack_status=$(getStackStatus "$stack_status_list")
 echo "$failed_stack_status"
 
-echo "DEBUG::::::::::::::: get stack status"
+echo "DEBUG::::::::::::::: Get stack status"
 debuggingGetStackStatus $STACK_NAME
 
+echo "DEBUG::::::::::::::: Handle stack status"
 handleStackStatus $failed_stack_status
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT

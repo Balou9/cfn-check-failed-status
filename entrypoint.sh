@@ -45,7 +45,7 @@ function getStackStatus () {
 function debuggingGetStackStatus() {
   statuuus=$(aws cloudformation describe-stack-events \
     --stack-name="$1" \
-    | jq -r '.StackEvents[]')
+    | jq -r '.StackEvents[] | .ResourceType + " " + .ResourceStatus')
   printf "$statuuus"
 }
 
@@ -86,18 +86,18 @@ function handleStackStatus() {
   fi
 }
 
-echo "DEBUG::::::::::::::: Get stack status list"
+echo "DEBUG::::::::::::::: getStackStatusList"
 stack_status_list=$(getStackStatusList "$STACK_NAME")
 echo "$stack_status_list"
 
-echo "DEBUG::::::::::::::: Get failed stack status"
+echo "DEBUG::::::::::::::: getStackStatus"
 failed_stack_status=$(getStackStatus "$stack_status_list")
 echo "$failed_stack_status"
 
-echo "DEBUG::::::::::::::: Get stack status"
+echo "DEBUG::::::::::::::: debuggingGetStackStatus"
 debuggingGetStackStatus $STACK_NAME
 
-echo "DEBUG::::::::::::::: Handle stack status"
+echo "DEBUG::::::::::::::: handleStackStatus"
 handleStackStatus $failed_stack_status
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT

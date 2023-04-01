@@ -85,18 +85,18 @@ function handleStackStatus() {
   fi
 }
 
-printf "DEBUG::::::::::::::: getStackStatusList"
+printf "DEBUG::::::::::::::: getStackStatusList \n"
 stack_status_list=$(getStackStatusList "$STACK_NAME")
-printf "$stack_status_list"
+printf "$stack_status_list \n"
 
-printf "DEBUG::::::::::::::: getStackStatus"
+printf "DEBUG::::::::::::::: getStackStatus \n"
 failed_stack_status=$(getStackStatus "$stack_status_list")
-printf "$failed_stack_status"
+printf "$failed_stack_status \n"
 
-printf "DEBUG::::::::::::::: debuggingGetStackStatus"
+printf "DEBUG::::::::::::::: debuggingGetStackStatus \n"
 debuggingGetStackStatus $STACK_NAME
 
-printf "DEBUG::::::::::::::: handleStackStatus"
+printf "DEBUG::::::::::::::: handleStackStatus \n"
 handleStackStatus $failed_stack_status
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT

@@ -41,10 +41,10 @@ function getStackStatus () {
   printf "$stack_status"
 }
 
-function debuggingGetStackStatus() {
+function debuggingHandleResourceStatus() {
   statuuus=$(aws cloudformation describe-stack-events \
     --stack-name="$1" \
-    | jq -r '.StackEvents[] | .ResourceType + " " + .ResourceStatus')
+    | jq -r '.StackEvents[] | select(.ResourceType != "AWS::CloudFormation::Stack") | .ResourceType + " " + .ResourceStatus')
   printf "$statuuus"
 }
 
@@ -93,11 +93,11 @@ printf "DEBUG::::::::::::::: getStackStatus \n"
 failed_stack_status=$(getStackStatus "$stack_status_list")
 printf "$failed_stack_status \n"
 
-printf "\n DEBUG::::::::::::::: debuggingGetStackStatus \n"
-debugging_stack_status=$(debuggingGetStackStatus $STACK_NAME)
-printf "$debugging_stack_status \n"
+printf "DEBUG::::::::::::::: debuggingHandleResourceStatus \n"
+debugging_resource_status=$(debuggingHandleResourceStatus $STACK_NAME)
+printf "$debugging_resource_status \n"
 
-printf "\n DEBUG::::::::::::::: handleStackStatus \n"
+printf "DEBUG::::::::::::::: handleStackStatus \n"
 handle_stack_status=$(handleStackStatus $failed_stack_status)
 printf "$handle_stack_status \n"
 

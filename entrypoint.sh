@@ -33,7 +33,6 @@ function getStackStatusList() {
 function getStackStatus () {
   # check and save final stack status
   for status in $stack_status_list; do
-    # echo "$status"
     if [[ $status = 'CREATE_FAILED' ]] || [[ $status = 'DELETE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_COMPLETE' ]];
     then
       stack_status=$status
@@ -53,7 +52,7 @@ function handleStackStatus() {
   if [[ -z "$1" ]]
   then
     output_msg="$STACK_NAME is in a nonfailed status. Stack will not be deleted."
-    echo "$output_msg"
+    printf "$output_msg"
   else
     output_msg="$STACK_NAME is in $1 status. About to be deleted."
     # delete all buckets
@@ -80,24 +79,24 @@ function handleStackStatus() {
       done
     fi
 
-    echo "$output_msg"
+    printf "$output_msg"
     aws cloudformation delete-stack --stack-name=$STACK_NAME
     verifyStackDeletion "$STACK_NAME"
   fi
 }
 
-echo "DEBUG::::::::::::::: getStackStatusList"
+printf "DEBUG::::::::::::::: getStackStatusList"
 stack_status_list=$(getStackStatusList "$STACK_NAME")
-echo "$stack_status_list"
+printf "$stack_status_list"
 
-echo "DEBUG::::::::::::::: getStackStatus"
+printf "DEBUG::::::::::::::: getStackStatus"
 failed_stack_status=$(getStackStatus "$stack_status_list")
-echo "$failed_stack_status"
+printf "$failed_stack_status"
 
-echo "DEBUG::::::::::::::: debuggingGetStackStatus"
+printf "DEBUG::::::::::::::: debuggingGetStackStatus"
 debuggingGetStackStatus $STACK_NAME
 
-echo "DEBUG::::::::::::::: handleStackStatus"
+printf "DEBUG::::::::::::::: handleStackStatus"
 handleStackStatus $failed_stack_status
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT

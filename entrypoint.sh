@@ -93,10 +93,10 @@ printf "DEBUG::::::::::::::: getStackStatus \n"
 failed_stack_status=$(getStackStatus "$stack_status_list")
 printf "$failed_stack_status \n"
 
-printf "DEBUG::::::::::::::: debuggingGetStackStatus \n"
+printf "\n DEBUG::::::::::::::: debuggingGetStackStatus \n"
 debuggingGetStackStatus $STACK_NAME
 
-printf "DEBUG::::::::::::::: handleStackStatus \n"
+printf "\n DEBUG::::::::::::::: handleStackStatus \n"
 handleStackStatus $failed_stack_status
 
 echo "message=$output_msg" >> $GITHUB_OUTPUT

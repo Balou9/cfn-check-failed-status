@@ -1,7 +1,7 @@
 #!/bin/bash
 STACK_NAME="$1"
 failed_stack_status=""
-
+# get bucket name from object value
 function getBucketName() {
   bs1=(${1//:/ })
   bucketstr1=${bs1[1]}
@@ -11,6 +11,7 @@ function getBucketName() {
   printf "$real_bucket_name"
 }
 
+# verifies that the stack is deleted for real by comparing the recorded stack deletion time by
 function verifyStackDeletion() {
   deletion_ts=$(date +%FT%H:%M)
   deletion_allowed_range_ts=$(date -d "+1 min" +%FT%H:%M)
@@ -92,6 +93,10 @@ printf "$stack_status_list \n"
 printf "DEBUG::::::::::::::: getStackStatus \n"
 failed_stack_status=$(getStackStatus "$stack_status_list")
 printf "$failed_stack_status \n"
+
+aws cloudformation describe-stack-events \
+  --stack-name="$STACK_NAME" \
+  | jq -r '.StackEvents[]'
 
 printf "DEBUG::::::::::::::: debuggingHandleResourceStatus \n"
 debugging_resource_status=$(debuggingHandleResourceStatus $STACK_NAME)

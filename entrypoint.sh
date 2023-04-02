@@ -44,7 +44,7 @@ function getStackStatus () {
 function debuggingHandleResourceStatus() {
   statuuus=$(aws cloudformation describe-stack-events \
     --stack-name="$1" \
-    | jq -r '.StackEvents[] | select(.ResourceType != "AWS::CloudFormation::Stack") | .ResourceType + " " + .ResourceStatus')
+    | jq -r '.StackEvents[] | select(.ResourceType != "AWS::CloudFormation::Stack") | .ResourceType + " " + .ResourceStatus + " " + .ResourceId')
   printf "$statuuus"
 }
 

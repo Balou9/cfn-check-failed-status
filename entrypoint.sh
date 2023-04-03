@@ -2,6 +2,15 @@
 STACK_NAME="$1"
 failed_stack_status=""
 # get bucket name from object value
+
+####################################
+### DEBUG_ observe 
+aws cloudformation describe-stack-events \
+  --stack-name="$STACK_NAME" \
+  | jq -r '.StackEvents[]'
+
+####################################
+
 function getBucketName() {
   bs1=(${1//:/ })
   bucketstr1=${bs1[1]}
@@ -93,10 +102,6 @@ printf "$stack_status_list \n"
 printf "DEBUG::::::::::::::: getStackStatus \n"
 failed_stack_status=$(getStackStatus "$stack_status_list")
 printf "$failed_stack_status \n"
-
-aws cloudformation describe-stack-events \
-  --stack-name="$STACK_NAME" \
-  | jq -r '.StackEvents[]'
 
 printf "DEBUG::::::::::::::: debuggingHandleResourceStatus \n"
 debugging_resource_status=$(debuggingHandleResourceStatus $STACK_NAME)

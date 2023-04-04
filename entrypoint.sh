@@ -4,7 +4,7 @@ failed_stack_status=""
 # get bucket name from object value
 
 ####################################
-### DEBUG_ observe 
+### DEBUG_ observe
 aws cloudformation describe-stack-events \
   --stack-name="$STACK_NAME" \
   | jq -r '.StackEvents[]'
@@ -40,10 +40,15 @@ function getStackStatusList() {
   printf "$list"
 }
 
+# stack status: reason of FAILED/ROLLBACK_COMPLETE status
+# ROLLBACK_COMPLETE: stack deployment fails because the s3 bucket already exists globally
+# DELETE_FAILED: stack deployment fails because the s3 bucket in the stack is not empty
+# UPDATE_ROLLBACK_COMPLETE: stack update fails because the s3 bucket in the stack already exists
+
 function getStackStatus () {
-  # check and save final stack status
+
   for status in $stack_status_list; do
-    if [[ $status = 'CREATE_FAILED' ]] || [[ $status = 'DELETE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_COMPLETE' ]];
+    if [[ $status = 'ROLLBACK_COMPLETE' ]] || [[ $status = 'DELETE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_COMPLETE' ]];
     then
       stack_status=$status
     fi

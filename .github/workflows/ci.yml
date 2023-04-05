@@ -9,7 +9,7 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
-  test-create-complete:
+  test-create-complete-cfn-stack:
     runs-on: ubuntu-latest
     env:
       CFN_TEMPLATES: "./test/stacks/test-create-complete-stack.yml\n"
@@ -63,9 +63,9 @@ jobs:
 
           aws s3 rb s3://${{ env.CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME }} --force
 
-  test-create-failed:
+  test-create-failed-cfn-resource:
     runs-on: ubuntu-latest
-    needs: test-create-complete
+    needs: test-create-complete-cfn-stack
     env:
       CFN_TEMPLATES: "./test/stacks/test-create-failed-stack.yml\n"
     steps:
@@ -129,9 +129,9 @@ jobs:
         run: |
           echo "${{ steps.checkstatus_create_failed.outputs.message }}"
 
-  test-delete-failed:
+  test-cfn-resource-delete-failed:
     runs-on: ubuntu-latest
-    needs: test-create-failed
+    needs: test-create-failed-cfn-resource
     env:
       CFN_TEMPLATES: "./test/stacks/test-delete-failed-stack.yml\n"
     steps:
@@ -174,7 +174,7 @@ jobs:
           aws s3 cp test/fixtures/example.txt s3://${{ env.CFN_CHECK_STATUS_DELETE_FAILED_A_BUCKET_NAME }}/
           aws s3 cp test/fixtures/example.txt s3://${{ env.CFN_CHECK_STATUS_DELETE_FAILED_B_BUCKET_NAME }}/
 
-      - name: deletes test stack (no --force) to force DELETE_FAILED status 
+      - name: deletes test stack (no --force) to force DELETE_FAILED status
         continue-on-error: true
         run: |
           aws cloudformation delete-stack --stack-name=${{ env.STACK_NAME }}
@@ -189,9 +189,9 @@ jobs:
         run: |
           echo "${{ steps.checkstatus_delete_failed.outputs.message }}"
 
-  test-update-failed:
+  test-cfn-stack-update-failed:
     runs-on: ubuntu-latest
-    needs: test-delete-failed
+    needs: test-cfn-resource-delete-failed
     env:
       CFN_TEMPLATES: "./test/stacks/test-update-failed-stack.yml\n./test/stacks/test-update-failed-stack0.yml\n"
     steps:

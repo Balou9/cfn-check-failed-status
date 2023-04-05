@@ -129,7 +129,7 @@ jobs:
         run: |
           echo "${{ steps.checkstatus_create_failed.outputs.message }}"
 
-  test-cfn-resource-delete-failed:
+  test-delete-failed-cfn-resource:
     runs-on: ubuntu-latest
     needs: test-create-failed-cfn-resource
     env:
@@ -189,9 +189,9 @@ jobs:
         run: |
           echo "${{ steps.checkstatus_delete_failed.outputs.message }}"
 
-  test-cfn-stack-update-failed:
+  test-update-failed-cfn-stack:
     runs-on: ubuntu-latest
-    needs: test-cfn-resource-delete-failed
+    needs: test-delete-failed-cfn-resource
     env:
       CFN_TEMPLATES: "./test/stacks/test-update-failed-stack.yml\n./test/stacks/test-update-failed-stack0.yml\n"
     steps:

@@ -100,17 +100,17 @@ function handleStackStatus() {
   fi
 }
 
-printf "DEBUG::::::::::::::: getStackStatusList \n"
-stack_status_list=$(getStackStatusList "$STACK_NAME")
-printf "$stack_status_list \n"
-
+# printf "DEBUG::::::::::::::: getStackStatusList \n"
+# stack_status_list=$(getStackStatusList "$STACK_NAME")
+# printf "$stack_status_list \n"
+#
 printf "DEBUG::::::::::::::: getStackStatus \n"
 failed_stack_status=$(getStackStatus "$stack_status_list")
 printf "$failed_stack_status \n"
 
-printf "DEBUG::::::::::::::: debuggingHandleResourceStatus \n"
-debugging_resource_status=$(debuggingHandleResourceStatus $STACK_NAME)
-printf "$debugging_resource_status \n"
+# printf "DEBUG::::::::::::::: debuggingHandleResourceStatus \n"
+# debugging_resource_status=$(debuggingHandleResourceStatus $STACK_NAME)
+# printf "$debugging_resource_status \n"
 
 printf "DEBUG::::::::::::::: handleStackStatus \n"
 handle_stack_status=$(handleStackStatus $failed_stack_status)

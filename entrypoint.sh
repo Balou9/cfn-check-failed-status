@@ -48,7 +48,7 @@ function getStackStatusList() {
 function getStackStatus () {
 
   for status in $stack_status_list; do
-    if [[ $status = 'ROLLBACK_COMPLETE' ]] || [[ $status = 'DELETE_FAILED' ]] || [[ $status = 'UPDATE_ROLLBACK_COMPLETE' ]];
+    if [[ "$status" = 'CREATE_COMPLETE' ]] || [[ "$status" = 'ROLLBACK_COMPLETE' ]] || [[ "$status" = 'DELETE_FAILED' ]] || [[ "$status" = 'UPDATE_ROLLBACK_COMPLETE' ]];
     then
       stack_status=$status
     fi
@@ -64,9 +64,9 @@ function debuggingHandleResourceStatus() {
 }
 
 function handleStackStatus() {
-  if [[ -z "$1" ]]
+  if [[ "$1" = 'CREATE_COMPLETE' ]]
   then
-    output_msg="$STACK_NAME is in a nonfailed status. Stack will not be deleted."
+    output_msg="$STACK_NAME is in $1 status. Stack will not be deleted."
     printf "$output_msg"
   else
     output_msg="$STACK_NAME is in $1 status. About to be deleted."

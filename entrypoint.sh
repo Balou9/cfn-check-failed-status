@@ -36,7 +36,7 @@ function verifyStackDeletion() {
 function getStackStatusList() {
   list=$(aws cloudformation describe-stack-events \
     --stack-name="$1" \
-    | jq -r '.StackEvents[] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus')
+    | jq -r '.StackEvents[0] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus')
   printf "$list"
 }
 

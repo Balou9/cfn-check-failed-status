@@ -231,7 +231,7 @@ jobs:
         continue-on-error: true
         run: |
           aws cloudformation deploy \
-            --template-file="test/stacks/test-update-failed-stack0.yml" \
+            --template-file="test/stacks/test-update-rollback-complete-stack0.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_UPDATE_ROLLBACK_COMPLETE_BUCKET_NAME }} \

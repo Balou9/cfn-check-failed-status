@@ -70,7 +70,7 @@ function handleStackStatus() {
   if [[ "$1" = 'CREATE_COMPLETE' ]]
   then
     output_msg="$STACK_NAME is in $1 status. Stack will not be deleted."
-    printf "$output_msg"
+    printf "$output_msg \n"
   else
     output_msg="$STACK_NAME is in $1 status. About to be deleted."
     # delete all buckets
@@ -97,7 +97,7 @@ function handleStackStatus() {
       done
     fi
 
-    printf "$output_msg"
+    printf "$output_msg \n"
     aws cloudformation delete-stack --stack-name=$STACK_NAME
     verifyStackDeletion "$STACK_NAME"
   fi

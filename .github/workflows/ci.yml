@@ -215,7 +215,7 @@ jobs:
       - name: configure the environment
         run: |
           echo "STACK_NAME=test-update-rollback-complete-cfn-check-failed-status" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_UPDATE_ROLLBACK_FAILED_BUCKET_NAME=test-update-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_UPDATE_ROLLBACK_COMPLETE_BUCKET_NAME=test-update-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
       - name: deploy the update-rollback-complete-cfn-check-failed-status stack
         run: |

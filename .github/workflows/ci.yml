@@ -193,7 +193,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test-delete-failed-stack-status
     env:
-      CFN_TEMPLATES: "./test/stacks/test-update-rollback-complete-stack.yml\n./test/stacks/test-update-rollback-complete0.yml\n"
+      CFN_TEMPLATES: "./test/stacks/test-update-rollback-complete-stack.yml\n./test/stacks/test-update-rollback-complete-stack0.yml\n"
     steps:
       - name: clone the repo
         uses: actions/checkout@v3

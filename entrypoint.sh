@@ -105,9 +105,9 @@ function handleStackStatus() {
 
 stack_status=$(getStackStatus "$STACK_NAME")
 checked_stack_status=$(checkStackStatus "$stack_status")
-# printf "$checked_stack_status \n"
+printf "$checked_stack_status \n"
 handled_stack_status=$(handleStackStatus $checked_stack_status)
-# printf "$handled_stack_status \n"
+printf "$handled_stack_status \n"
 
 # printf "DEBUG::::::::::::::: debuggingHandleResourceStatus \n"
 # debugging_resource_status=$(debuggingHandleResourceStatus $STACK_NAME)

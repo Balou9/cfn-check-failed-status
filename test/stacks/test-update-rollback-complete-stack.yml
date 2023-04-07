@@ -1,4 +1,4 @@
-update-rollback-completeAWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: 2010-09-09
 Description: cfn-check-failed-status UPDATE_ROLLBACK_COMPLETE test stack
 Metadata:
   AWS::Cloudformation::Interface:

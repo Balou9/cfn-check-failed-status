@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: cfn-check-failed-status DELETE_FAILED stack
+Description: cfn-check-failed-status DELETE_FAILED test stack
 Metadata:
   AWS::Cloudformation::Interface:
     Parametergroups:

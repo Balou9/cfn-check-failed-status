@@ -9,7 +9,7 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
-  test-create-complete-cfn-stack:
+  test-create-complete-stack-status:
     runs-on: ubuntu-latest
     env:
       CFN_TEMPLATES: "./test/stacks/test-create-complete-stack.yml\n"
@@ -63,11 +63,11 @@ jobs:
 
           aws s3 rb s3://${{ env.CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME }} --force
 
-  test-create-failed-cfn-resource:
+  test-rollback-complete-stack-status:
     runs-on: ubuntu-latest
-    needs: test-create-complete-cfn-stack
+    needs: test-create-complete-stack-status
     env:
-      CFN_TEMPLATES: "./test/stacks/test-create-failed-stack.yml\n"
+      CFN_TEMPLATES: "./test/stacks/test-rollback-complete-stack.yml\n"
     steps:
       - name: clone the repo
         uses: actions/checkout@v3
@@ -88,50 +88,50 @@ jobs:
 
       - name: configure the environment with two identical bucket name environment variables
         run: |
-          echo "STACK_NAME=test-create-failed-cfn-check-failed-status" >> $GITHUB_ENV
-          echo "STACK_NAME_2=test-create-failed-cfn-check-failed-status-2" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=test-create-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME_2=test-create-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
+          echo "STACK_NAME=test-rollback-complete-cfn-check-failed-status" >> $GITHUB_ENV
+          echo "STACK_NAME_2=test-rollback-complete-cfn-check-failed-status-2" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=test-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME_2=test-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
-      - name: deploy the create-failed-cfn-check-failed-status stack
+      - name: deploy the rollback-complete-cfn-check-failed-status stack
         run: |
           aws cloudformation deploy \
-            --template-file="test/stacks/test-create-failed-stack.yml" \
+            --template-file="test/stacks/test-rollback-complete-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: redeploy the create-failed-cfn-check-failed-status stack to force XXX_FAILED status
+      - name: redeploy the rollback-complete-cfn-check-failed-status stack to force XXX_FAILED status
         continue-on-error: true
         run: |
           aws cloudformation deploy \
-            --template-file="test/stacks/test-create-failed-stack.yml" \
+            --template-file="test/stacks/test-rollback-complete-stack.yml" \
             --stack-name=${{ env.STACK_NAME_2 }} \
             --parameter-overrides \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME_2 }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: test cfn-check-failed-status with a cloudformation stack in CREATE_FAILED status
+      - name: test cfn-check-failed-status with a cloudformation stack in ROLLBACK_COMPLETE status
         uses: ./
-        id: checkstatus_create_failed
+        id: checkstatus_rollback_complete
         with:
           cfn-stack-name: ${{ env.STACK_NAME_2 }}
 
-      - name: delete the create-failed-cfn-check-failed-status test stack
+      - name: delete the rollback-complete-cfn-check-failed-status test stack
         run: |
           aws cloudformation delete-stack \
             --stack-name=${{ env.STACK_NAME }}
 
       - name: validate output message of the status check
         run: |
-          echo "${{ steps.checkstatus_create_failed.outputs.message }}"
+          echo "${{ steps.checkstatus_rollback_complete.outputs.message }}"
 
-  test-delete-failed-cfn-resource:
+  test-delete-failed-stack-status:
     runs-on: ubuntu-latest
-    needs: test-create-failed-cfn-resource
+    needs: test-rollback-complete-stack-status
     env:
       CFN_TEMPLATES: "./test/stacks/test-delete-failed-stack.yml\n"
     steps:
@@ -189,11 +189,11 @@ jobs:
         run: |
           echo "${{ steps.checkstatus_delete_failed.outputs.message }}"
 
-  test-update-failed-cfn-stack:
+  test-update-rollback-complete-stack-status:
     runs-on: ubuntu-latest
-    needs: test-delete-failed-cfn-resource
+    needs: test-delete-failed-stack-status
     env:
-      CFN_TEMPLATES: "./test/stacks/test-update-failed-stack.yml\n./test/stacks/test-update-failed-stack0.yml\n"
+      CFN_TEMPLATES: "./test/stacks/test-update-rollback-complete-stack.yml\n./test/stacks/test-update-rollback-complete0.yml\n"
     steps:
       - name: clone the repo
         uses: actions/checkout@v3
@@ -214,36 +214,36 @@ jobs:
 
       - name: configure the environment
         run: |
-          echo "STACK_NAME=test-update-failed-cfn-check-failed-status" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_UPDATE_FAILED_BUCKET_NAME=test-update-failed-cfn-check-failed-status-bucket" >> $GITHUB_ENV
+          echo "STACK_NAME=test-update-rollback-complete-cfn-check-failed-status" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_UPDATE_ROLLBACK_FAILED_BUCKET_NAME=test-update-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
-      - name: deploy the update-failed-cfn-check-failed-status stack
+      - name: deploy the update-rollback-complete-cfn-check-failed-status stack
         run: |
           aws cloudformation deploy \
-            --template-file="test/stacks/test-update-failed-stack.yml" \
+            --template-file="test/stacks/test-update-rollback-complete-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
-              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_UPDATE_FAILED_BUCKET_NAME }} \
+              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_UPDATE_ROLLBACK_COMPLETE_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: redeploy the update-failed-cfn-check-failed-status stack to force UPDATE_FAILED status
+      - name: redeploy the update-rollback-complete-cfn-check-failed-status stack to force UPDATE_ROLLBACK_COMPLETE status
         continue-on-error: true
         run: |
           aws cloudformation deploy \
             --template-file="test/stacks/test-update-failed-stack0.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
-              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_UPDATE_FAILED_BUCKET_NAME }} \
+              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_UPDATE_ROLLBACK_COMPLETE_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 
-      - name: test cfn-check-failed-status with a cloudformation stack in UPDATE_FAILED status
+      - name: test cfn-check-failed-status with a cloudformation stack in UPDATE_ROLLBACK_COMPLETE status
         uses: ./
-        id: checkstatus_update_failed
+        id: checkstatus_update_rollback_complete
         with:
           cfn-stack-name: ${{ env.STACK_NAME }}
 
       - name: validate output message of the status check
         run: |
-          echo "${{ steps.checkstatus_update_failed.outputs.message }}"
+          echo "${{ steps.checkstatus_update_rollback_complete.outputs.message }}"

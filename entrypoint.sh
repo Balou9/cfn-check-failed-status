@@ -49,13 +49,13 @@ function getStackStatus() {
 
 function checkStackStatus () {
   # echo "DEBUG::: in checkStackStatus :::::::: $1"
+  status="$1"
 
-  for status in $1; do
-    if [[ "$status" = 'CREATE_COMPLETE' ]] || [[ "$status" = 'ROLLBACK_COMPLETE' ]] || [[ "$status" = 'DELETE_FAILED' ]] || [[ "$status" = 'UPDATE_ROLLBACK_COMPLETE' ]];
-    then
-      stack_status=$status
-    fi
-  done
+  if [[ "$status" = 'CREATE_COMPLETE' ]] || [[ "$status" = 'ROLLBACK_COMPLETE' ]] || [[ "$status" = 'DELETE_FAILED' ]] || [[ "$status" = 'UPDATE_ROLLBACK_COMPLETE' ]];
+  then
+    stack_status=$status
+  fi
+
   printf "$stack_status"
 }
 

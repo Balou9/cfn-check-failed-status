@@ -48,7 +48,7 @@ function getStackStatus() {
 # UPDATE_ROLLBACK_COMPLETE: stack update fails because the s3 bucket in the stack already exists
 
 function checkStackStatus () {
-  echo "DEBUG::: in checkStackStatus :::::::: $1"
+  # echo "DEBUG::: in checkStackStatus :::::::: $1"
 
   for status in $1; do
     if [[ "$status" = 'CREATE_COMPLETE' ]] || [[ "$status" = 'ROLLBACK_COMPLETE' ]] || [[ "$status" = 'DELETE_FAILED' ]] || [[ "$status" = 'UPDATE_ROLLBACK_COMPLETE' ]];

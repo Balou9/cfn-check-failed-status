@@ -1,16 +1,17 @@
 #!/bin/bash
 STACK_NAME="$1"
-failed_stack_status=""
+checked_stack_status=""
 # get bucket name from object value
 
 ####################################
-### DEBUG_ observe
+### observe stack events
 # aws cloudformation describe-stack-events \
 #   --stack-name="$STACK_NAME" \
 #   | jq -r '.StackEvents[]'
 
 ####################################
 
+# get bucket name from jq output value
 function getBucketName() {
   bs1=(${1//:/ })
   bucketstr1=${bs1[1]}
@@ -20,7 +21,7 @@ function getBucketName() {
   printf "$real_bucket_name"
 }
 
-# verifies that the stack is deleted for real by comparing the recorded stack deletion time by
+# verify stack deletion
 function verifyStackDeletion() {
   deletion_ts=$(date +%FT%H:%M)
   deletion_allowed_range_ts=$(date -d "+1 min" +%FT%H:%M)
@@ -33,11 +34,12 @@ function verifyStackDeletion() {
   [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && printf "Stack deletion time of the stack $1 verified at $deletion_ts" || printf "Stack deletion time NOT verified, check the aws console if the stack $1 is really deleted."
 }
 
-function getStackStatusList() {
-  list=$(aws cloudformation describe-stack-events \
+# get current stack status
+function getStackStatus() {
+  status=$(aws cloudformation describe-stack-events \
     --stack-name="$1" \
     | jq -r '.StackEvents[0] | select(.ResourceType == "AWS::CloudFormation::Stack") | .ResourceStatus')
-  printf "$list"
+  printf "$status"
 }
 
 # stack status: reason of FAILED/ROLLBACK_COMPLETE status
@@ -45,9 +47,10 @@ function getStackStatusList() {
 # DELETE_FAILED: stack deployment fails because the s3 bucket in the stack is not empty
 # UPDATE_ROLLBACK_COMPLETE: stack update fails because the s3 bucket in the stack already exists
 
-function getStackStatus () {
+function checkStackStatus () {
+  echo "DEBUG::: in checkStackStatus :::::::: $1"
 
-  for status in $stack_status_list; do
+  for status in $1; do
     if [[ "$status" = 'CREATE_COMPLETE' ]] || [[ "$status" = 'ROLLBACK_COMPLETE' ]] || [[ "$status" = 'DELETE_FAILED' ]] || [[ "$status" = 'UPDATE_ROLLBACK_COMPLETE' ]];
     then
       stack_status=$status
@@ -100,11 +103,11 @@ function handleStackStatus() {
   fi
 }
 
-stack_status_list=$(getStackStatusList "$STACK_NAME")
-failed_stack_status=$(getStackStatus "$stack_status_list")
-printf "$failed_stack_status \n"
-handle_stack_status=$(handleStackStatus $failed_stack_status)
-printf "$handle_stack_status \n"
+stack_status=$(getStackStatus "$STACK_NAME")
+checked_stack_status=$(checkStackStatus "$stack_status")
+printf "$checked_stack_status \n"
+handled_stack_status=$(handleStackStatus $failed_stack_status)
+printf "$handled_stack_status \n"
 
 # printf "DEBUG::::::::::::::: debuggingHandleResourceStatus \n"
 # debugging_resource_status=$(debuggingHandleResourceStatus $STACK_NAME)

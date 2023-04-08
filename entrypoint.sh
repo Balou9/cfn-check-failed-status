@@ -1,15 +1,4 @@
 #!/bin/bash
-STACK_NAME="$1"
-checked_stack_status=""
-# get bucket name from object value
-
-####################################
-### observe stack events
-# aws cloudformation describe-stack-events \
-#   --stack-name="$STACK_NAME" \
-#   | jq -r '.StackEvents[]'
-
-####################################
 
 # get bucket name from jq output value
 function getBucketName() {
@@ -69,14 +58,15 @@ function debuggingHandleResourceStatus() {
 function handleStackStatus() {
   if [[ "$1" = 'CREATE_COMPLETE' ]]
   then
-    output_msg="$STACK_NAME is in $1 status. Stack will not be deleted."
+    output_msg="$2 is in $1 status. Stack will not be deleted."
+    echo "message=$output_msg" >> $GITHUB_OUTPUT
     printf "$output_msg \n"
   else
-    output_msg="$STACK_NAME is in $1 status. About to be deleted."
+    output_msg="$2 is in $1 status. About to be deleted."
     # delete all buckets
     bucket_list_abt_delete=$(
       aws cloudformation describe-stack-events \
-        --stack-name=$STACK_NAME \
+        --stack-name=$2 \
         | jq -r '.StackEvents[] | select(.ResourceType == "AWS::S3::Bucket") | select((.ResourceStatus | test("CREATE_FAILED")) or .ResourceStatus == "CREATE_IN_PROGRESS") | .ResourceProperties'
       )
 
@@ -98,19 +88,22 @@ function handleStackStatus() {
     fi
 
     printf "$output_msg \n"
-    aws cloudformation delete-stack --stack-name=$STACK_NAME
-    verifyStackDeletion "$STACK_NAME"
+    aws cloudformation delete-stack --stack-name=$2
+    verifyStackDeletion "$2"
+    echo "message=$output_msg" >> $GITHUB_OUTPUT
   fi
 }
 
-stack_status=$(getStackStatus "$STACK_NAME")
-checked_stack_status=$(checkStackStatus "$stack_status")
-printf "$checked_stack_status \n"
-handled_stack_status=$(handleStackStatus $checked_stack_status)
-printf "$handled_stack_status \n"
+function main () {
+  stack_status=$(getStackStatus "$1")
+  checked_stack_status=$(checkStackStatus "$stack_status")
+  printf "$checked_stack_status \n"
+  handled_stack_status=$(handleStackStatus $checked_stack_status "$1")
+  printf "$handled_stack_status \n"
+}
+
+main $1
 
 # printf "DEBUG::::::::::::::: debuggingHandleResourceStatus \n"
 # debugging_resource_status=$(debuggingHandleResourceStatus $STACK_NAME)
 # printf "$debugging_resource_status \n"
-
-echo "message=$output_msg" >> $GITHUB_OUTPUT

@@ -59,8 +59,8 @@ function handleStackStatus() {
   if [[ "$1" = 'CREATE_COMPLETE' ]]
   then
     output_msg="$2 is in $1 status. Stack will not be deleted."
-    echo "message=$output_msg" >> $GITHUB_OUTPUT
-    printf "$output_msg \n"
+    # echo "message=$output_msg" >> $GITHUB_OUTPUT
+    # printf "$output_msg \n"
   else
     output_msg="$2 is in $1 status. About to be deleted."
     # delete all buckets
@@ -87,11 +87,12 @@ function handleStackStatus() {
       done
     fi
 
-    printf "$output_msg \n"
     aws cloudformation delete-stack --stack-name=$2
     verifyStackDeletion "$2"
-    echo "message=$output_msg" >> $GITHUB_OUTPUT
   fi
+
+  echo "message=$output_msg" >> $GITHUB_OUTPUT
+  printf "$output_msg \n"
 }
 
 function main () {

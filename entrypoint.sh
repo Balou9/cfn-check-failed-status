@@ -20,7 +20,7 @@ function verifyStackDeletion() {
       --arg STACK_NAME "$1" \
       '[.StackSummaries[] | select(.StackName == $STACK_NAME)][0] | .DeletionTime'
   )
-  [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && printf "Stack deletion time of the stack $1 verified at $deletion_ts" || printf "Stack deletion time NOT verified, check the aws console if the stack $1 is really deleted."
+  [[ "$last_stack_deletion_ts"  == "$deletion_ts"* || $deletion_allowed_range_ts == "$deletion_ts"* ]] && printf "Stack deletion time of the stack $1 verified at $deletion_ts \n" || printf "Stack deletion time NOT verified, check the aws console if the stack $1 was actually deleted. \n"
 }
 
 # get current stack status

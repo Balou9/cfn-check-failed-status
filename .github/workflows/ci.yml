@@ -94,23 +94,13 @@ jobs:
           echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME_2=test-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
       - name: deploy the rollback-complete-cfn-check-failed-status stack
+        continue-on-error: true
         run: |
           aws cloudformation deploy \
             --template-file="test/stacks/test-rollback-complete-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
               CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }} \
-            --capabilities=CAPABILITY_NAMED_IAM \
-            --no-fail-on-empty-changeset
-
-      - name: redeploy the rollback-complete-cfn-check-failed-status stack to force XXX_FAILED status
-        continue-on-error: true
-        run: |
-          aws cloudformation deploy \
-            --template-file="test/stacks/test-rollback-complete-stack.yml" \
-            --stack-name=${{ env.STACK_NAME_2 }} \
-            --parameter-overrides \
-              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME_2 }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 

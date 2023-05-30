@@ -18,8 +18,8 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref CfnCheckStatusBucketName
-      AccessControl: PublicRead
-      OwnershipControls:
-        Rules:
-          - ObjectOwnership: BucketOwnerEnforced
+      # AccessControl: PublicRead
+      # OwnershipControls:
+      #   Rules:
+      #     - ObjectOwnership: BucketOwnerEnforced
     DeletionPolicy: Delete

@@ -18,5 +18,5 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref CfnCheckStatusBucketName
-      AccessControl: PublicRead
+      # AccessControl: PublicRead
     DeletionPolicy: Delete

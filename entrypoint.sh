@@ -98,7 +98,7 @@ function main () {
   stack_status=$(getStackStatus "$1")
   checked_stack_status=$(checkStackStatus "$stack_status")
   printf "$checked_stack_status \n"
-  handled_stack_status=$(handleStackStatus $checked_stack_status "$1")
+  handled_stack_status=$(handleStackStatus "$checked_stack_status" "$1")
   printf "$handled_stack_status \n"
 }
 

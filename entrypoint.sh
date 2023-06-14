@@ -78,13 +78,14 @@ function handleStackStatus() {
       for bucket in ${bucket_list_abt_delete[@]}; do
         bucket_name=$(getBucketName "$bucket")
 
-        echo "DEBUG::::Bucket name $bucket"
+        echo "DEBUG:::::::Bucket name $bucket_name"
         bucket_trlist+=("$bucket_name")
       done
 
       bucket_list=$(printf "%s\n" "${bucket_trlist[@]}" | sort -u)
 
       for bucket in $bucket_list; do
+        echo "DEBUG:::::::Bucket by name ready for deletion $bucket"
         aws s3 rb s3://$bucket --force
       done
     fi

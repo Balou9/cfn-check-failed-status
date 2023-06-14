@@ -77,6 +77,8 @@ function handleStackStatus() {
 
       for bucket in ${bucket_list_abt_delete[@]}; do
         bucket_name=$(getBucketName "$bucket")
+
+        echo "DEBUG::::Bucket name $bucket"
         bucket_trlist+=("$bucket_name")
       done
 

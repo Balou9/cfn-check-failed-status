@@ -76,6 +76,8 @@ function handleStackStatus() {
       declare -a bucket_trlist=()
 
       for bucket in ${bucket_list_abt_delete[@]}; do
+        echo "DEBUG:::::::Bucket name before the trim $bucket_name"
+
         bucket_name=$(getBucketName "$bucket")
 
         echo "DEBUG:::::::Bucket name $bucket_name"

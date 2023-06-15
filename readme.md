@@ -71,4 +71,4 @@ and: https://aws.amazon.com/premiumsupport/knowledge-center/cloudformation-stack
 
 # License
 
-[GPL-2.0](docs/license.md)
+[MIT](docs/license.md)

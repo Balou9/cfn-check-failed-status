@@ -3,10 +3,8 @@
 # get bucket name from jq output value
 function getBucketName() {
   bs1=(${1//:/ })
-  bucketstr1=${bs1[1]}
-  bs2=(${bucketstr1//,/ })
-  bucket_trimmed=${bs2[0]}
-  real_bucket_name=$(sed -e 's/^"//' -e 's/"$//' <<<"$bucket_trimmed")
+  bn=$(echo "${bs1[1]}"| tr -d '"')
+  real_bucket_name=$(echo ${bn%\}*})
   printf "$real_bucket_name"
 }
 

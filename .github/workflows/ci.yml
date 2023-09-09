@@ -89,17 +89,20 @@ jobs:
       - name: configure the environment with two identical bucket name environment variables
         run: |
           echo "STACK_NAME=test-rollback-complete-cfn-check-failed-status" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=test-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
-          echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME_2=test-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
+          echo "CFN_CHECK_STATUS_ROLLBACK_COMPLETE_BUCKET_NAME=test-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
-      - name: deploy the rollback-complete-cfn-check-failed-status stack
+      - name: precreates bucket
+        run: |
+          aws s3api create-bucket --bucket ${{ env.CFN_CHECK_STATUS_ROLLBACK_COMPLETE_BUCKET_NAME }}
+
+      - name: deploy the rollback-complete-cfn-check-failed-status stack with same bucket name to force ROLLBACK_COMPLETE status
         continue-on-error: true
         run: |
           aws cloudformation deploy \
             --template-file="test/stacks/test-rollback-complete-stack.yml" \
             --stack-name=${{ env.STACK_NAME }} \
             --parameter-overrides \
-              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME }} \
+              CfnCheckStatusBucketName=${{ env.CFN_CHECK_STATUS_ROLLBACK_COMPLETE_BUCKET_NAME }} \
             --capabilities=CAPABILITY_NAMED_IAM \
             --no-fail-on-empty-changeset
 

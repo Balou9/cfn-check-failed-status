@@ -54,14 +54,12 @@ But by using this action you can
 
 ## feat: cfn stack deletion on failed status
 
-
 - DELETE_FAILED (stack deletion failed)
 - UPDATE_ROLLBACK_COMPLETE (stack update failed)
-
+- ROLLBACK_COMPLETE (stack creation failed)
 
 **todo**
 
-- ROLLBACK_COMPLETE (stack creation failed )
 - ROLLBACK_FAILED
 - UPDATE_FAILED
 - UPDATE_ROLLBACK_FAILED

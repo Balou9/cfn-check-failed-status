@@ -89,7 +89,6 @@ jobs:
       - name: configure the environment with two identical bucket name environment variables
         run: |
           echo "STACK_NAME=test-rollback-complete-cfn-check-failed-status" >> $GITHUB_ENV
-          echo "STACK_NAME_2=test-rollback-complete-cfn-check-failed-status-2" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME=test-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
           echo "CFN_CHECK_STATUS_CREATE_FAILED_BUCKET_NAME_2=test-rollback-complete-cfn-check-failed-status-bucket" >> $GITHUB_ENV
 
@@ -108,7 +107,7 @@ jobs:
         uses: ./
         id: checkstatus_rollback_complete
         with:
-          cfn-stack-name: ${{ env.STACK_NAME_2 }}
+          cfn-stack-name: ${{ env.STACK_NAME }}
 
       - name: delete the rollback-complete-cfn-check-failed-status test stack
         run: |

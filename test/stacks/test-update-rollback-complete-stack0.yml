@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: cfn-check-failed-status UPDATE_ROLLBACK_COMPLETE test stack
 Metadata:
-  AWS::Cloudformation::Interface:
-    Parametergroups:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
       - Label:
           default: Storage
         Parameters:
@@ -10,20 +10,20 @@ Metadata:
 
 Parameters:
   CfnCheckStatusBucketName:
-    Description: Name of the the test bucket
+    Description: Name of the test bucket
     Type: String
 
 Resources:
   CfnCheckStatusBucketA:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref CfnCheckStatusBucketName
+      BucketName: !Sub "${CfnCheckStatusBucketName}-a"
       # AccessControl: PublicRead
     DeletionPolicy: Delete
 
   CfnCheckStatusBucketB:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref CfnCheckStatusBucketName
+      BucketName: !Sub "${CfnCheckStatusBucketName}-b"
       # AccessControl: PublicRead
     DeletionPolicy: Delete

@@ -58,6 +58,7 @@ jobs:
       - name: Cleanup test stack and bucket
         run: |
           aws cloudformation delete-stack --stack-name="${{ env.STACK_NAME }}"
+          aws cloudformation wait stack-delete-complete --stack-name="${{ env.STACK_NAME }}"
           aws s3 rb "s3://${{ env.CFN_CHECK_STATUS_CREATE_COMPLETE_BUCKET_NAME }}" --force
 
   test-rollback-complete-stack-status:
